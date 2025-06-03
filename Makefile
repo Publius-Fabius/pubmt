@@ -1,0 +1,25 @@
+
+CFLAGS = -g -std=c11 -pedantic -Wconversion -Wall -I include
+CC = gcc
+
+clean:
+	rm -r build/pubmt 
+	rm -r build 
+	rm -r bin
+
+build:
+	mkdir build
+	mkdir build/pubmt
+
+bin:
+	mkdir bin 
+
+scaffold: build bin
+
+build/pubmt/linked_list.o : source/pubmt/linked_list.c \
+	include/pubmt/linked_list.h \
+	scaffold 
+	$(CC) $(CFLAGS) -c -o $@ $<
+bin/test_linked_list: tests/pubmt/linked_list.c \
+	build/pubmt/linked_list.o 
+	$(CC) $(CFLAGS) -o $@ $^ 
