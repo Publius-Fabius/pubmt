@@ -39,7 +39,7 @@ void *pmt_ll_node_at(pmt_ll_node_iface *iface, void *list, const size_t index);
 void *pmt_ll_node_push_front(pmt_ll_node_iface *iface, void *list, void *fst);
 
 /** 
- * Push 'last' onto the back of the list. 
+ * Push 'last' onto the back of the list O(n). 
  * 
  * RETURNS: 
  *      list - List was not empty.
