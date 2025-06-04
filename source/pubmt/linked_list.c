@@ -237,7 +237,8 @@ size_t pmt_ll_node_filter(
                 } 
         #endif
         void *node = *ref;
-        void *first, *prev = NULL;
+        void *first = NULL;
+        void *prev = NULL;
         size_t count = 0;
         while(node) {
                 void *next = iface->get_next(node);

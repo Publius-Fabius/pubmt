@@ -142,22 +142,4 @@ bool pmt_ll_node_foreach(
  */
 void *pmt_ll_node_reverse(pmt_ll_node_iface *iface, void *list);
 
-// /** Linked List Interface */
-// typedef struct pmt_ll_iface {
-//         pmt_ll_node_iface node_iface;
-//         void *(*get_first)(void *list);
-//         void (*set_first)(void *list, void *node);
-//         void *(*get_last)(void *list);
-//         void (*set_last)(void *list, void *node);
-// } pmt_ll_iface;
-
-// /** 
-//  * Is the list empty? 
-//  * 
-//  * RETURNS:
-//  *      true - List is empty. 
-//  *      false - List is not empty.
-//  */
-// bool pmt_ll_isempty(pmt_ll_iface *iface, void *list);
-
 #endif
