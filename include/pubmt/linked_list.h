@@ -32,14 +32,15 @@ size_t pmt_ll_node_count(pmt_ll_node_iface *iface, void *list);
 void *pmt_ll_node_at(pmt_ll_node_iface *iface, void *list, const size_t index);
 
 /** 
- * Push 'fst' onto the front of the list. 
+ * Push 'fst', an unlinked node, onto the front of the list. 
  * 
  * RETURNS: fst
  */
 void *pmt_ll_node_push_front(pmt_ll_node_iface *iface, void *list, void *fst);
 
 /** 
- * Push 'last' onto the back of the list O(n). 
+ * Push 'last' onto the back of the list O(n).  If 'last' is not a singleton,
+ * this function will concatenate the two lists.
  * 
  * RETURNS: 
  *      list - List was not empty.
@@ -48,7 +49,7 @@ void *pmt_ll_node_push_front(pmt_ll_node_iface *iface, void *list, void *fst);
 void *pmt_ll_node_push_back(pmt_ll_node_iface *iface, void *list, void *last);
 
 /** 
- * Inserts succ immediately after node O(1). 
+ * Inserts 'succ', an unlinked node, immediately after node O(1). 
  * 
  * RETURNS: node
  */
@@ -58,7 +59,7 @@ void *pmt_ll_node_insert_after(
         void *succ);
 
 /** 
- * Remove the node's successor.
+ * Remove the node's successor O(1).
  * 
  * RETURNS: The removed successor, or NULL if there was none.
  */
@@ -76,23 +77,46 @@ void *pmt_ll_node_remove_first(pmt_ll_node_iface *iface, void **list);
  * Remove the last node of the list O(n). 
  * 
  * RETURNS: The removed node, or NULL if list was empty.
- * MODIFIES: The value of 'list' is updated to reflect any changes.
+ * MODIFIES: 
+ *      The value of 'list_ref' points to the beginning of the modified list.
+ *      The value of 'pred_ref' is the deleted node's predecessor.
  */
-void *pmt_ll_node_remove_last(pmt_ll_node_iface *iface, void **list);
+void *pmt_ll_node_remove_last_args(
+        pmt_ll_node_iface *iface, 
+        void **list_ref,
+        void **pred_ref);
 
 /**
- * Remove node from the list O(n).
+ * Remove the last node of the list O(n). 
  * 
- * RETURNS: The removed node, or NULL if not found.
- * MODIFIES: The value of 'list' is updated to reflect any changes.
+ * RETURNS: The removed node, or NULL if list was empty.
+ * MODIFIES: 
+ *      The value of 'list' points to the beginning of the modified list.
  */
-void *pmt_ll_node_remove(pmt_ll_node_iface *iface, void **list, void *node);
+void *pmt_ll_node_remove_last(pmt_ll_node_iface *iface, void **list);
 
 /**
  * Remove the first node that matches the predicate O(n).
  * 
  * RETURNS: The removed node, or NULL if not found.
- * MODIFIES: The value of 'list' is updated to reflect any changes.
+ * MODIFIES: 
+ *      The value of 'list_ref' points to the beginning of the modified list.
+ *      The value of 'pred_ref' is the deleted node's predecessor.
+ * 
+ */
+void *pmt_ll_node_remove_when_args(
+        pmt_ll_node_iface *iface, 
+        void **list_ref, 
+        bool (*predicate)(void *node, void *state),
+        void *state,
+        void **pred_ref);
+
+/**
+ * Remove the first node that matches the predicate O(n).
+ * 
+ * RETURNS: The removed node, or NULL if not found.
+ * MODIFIES: 
+ *      The value of 'list' points to the beginning of the modified list.
  */
 void *pmt_ll_node_remove_when(
         pmt_ll_node_iface *iface, 
@@ -100,11 +124,27 @@ void *pmt_ll_node_remove_when(
         bool (*predicate)(void *node, void *state),
         void *state);
 
+
 /** 
  * Filter list, removing any nodes that do not match the predicate O(n). 
  * 
  * RETURNS: The number of elements removed.
- * MODIFIES: The value of 'list' is updated to reflect any changes.
+ * MODIFIES: 
+ *      The value of 'list_ref' points to the beginning of the modified list.
+ *      The value of 'last_ref' points to the last node of the modified list.
+ */
+size_t pmt_ll_node_filter_args(
+        pmt_ll_node_iface *iface, 
+        void **first_ref, 
+        bool (*predicate)(void *node, void *state),
+        void *state,
+        void **last_ref);
+
+/** 
+ * Filter list, removing any nodes that do not match the predicate O(n). 
+ * 
+ * RETURNS: The number of elements removed.
+ * MODIFIES: The value of 'list' points to the beginning of the modified list.
  */
 size_t pmt_ll_node_filter(
         pmt_ll_node_iface *iface, 
@@ -113,9 +153,9 @@ size_t pmt_ll_node_filter(
         void *state);
 
 /** 
- * Find first node in collection that matches the predicate O(n). 
+ * Find first node in the list that matches the predicate O(n). 
  * 
- * RETURNS: The first node matching the predicate, or NULL if not found.
+ * RETURNS: The first node matching the predicate, or NULL if none were found.
  */
 void *pmt_ll_node_find(
         pmt_ll_node_iface *iface, 
@@ -141,5 +181,97 @@ bool pmt_ll_node_foreach(
  * RETURNS: The reversed list.
  */
 void *pmt_ll_node_reverse(pmt_ll_node_iface *iface, void *list);
+
+/** Singly Linked List Interface */
+typedef struct pmt_ll_iface {
+        pmt_ll_node_iface node_iface;
+        void *(*get_first)(void *list);
+        void (*set_first)(void *list, void *first);
+        void *(*get_last)(void *list);
+        void (*set_last)(void *list, void *last);
+} pmt_ll_iface;
+
+/**
+ * Is the list empty O(1). 
+ * 
+ * RETURNS: true if empty, otherwise false.
+ */
+bool pmt_ll_isempty(pmt_ll_iface *iface, void *list);
+
+/** 
+ * Push 'first', an unlinked node, onto the front of the list O(1). 
+ * 
+ * RETURNS: list
+ */
+void *pmt_ll_push_front(pmt_ll_iface *iface, void *list, void *first);
+
+/** 
+ * Push the node 'last' onto the back of the list.  Complexity is O(1) in 
+ * the case where 'last' is a singleton.  
+ * 
+ * RETURNS: list
+ */
+void *pmt_ll_push_back(pmt_ll_iface *iface, void *list, void *last);
+
+/** 
+ * Inserts succ, an unlinked node, immediately after node O(1). 
+ * 
+ * RETURNS: list
+ */
+void *pmt_ll_insert_after(
+        pmt_ll_iface *iface, 
+        void *list, 
+        void *node,
+        void *succ);
+
+/** 
+ * Remove the node's successor O(1).
+ * 
+ * RETURNS: The removed successor, or NULL if there was none.
+ */
+void *pmt_ll_remove_after(pmt_ll_iface *iface, void *list, void *node);
+
+/** 
+ * Remove the first node of the list O(1).
+ * 
+ * RETURNS: The removed node, or NULL if the list was empty.
+ */
+void *pmt_ll_remove_first(pmt_ll_iface *iface, void *list);
+
+/**
+ * Remove the last node of the list O(n). 
+ * 
+ * RETURNS: The removed node, or NULL if the list was empty.
+ */
+void *pmt_ll_remove_last(pmt_ll_iface *iface, void *list);
+
+/**
+ * Remove the first node that matches the predicate O(n).
+ * 
+ * RETURNS: The removed node, or NULL if not found.
+ */
+void *pmt_ll_remove_when(
+        pmt_ll_iface *iface, 
+        void *list, 
+        bool (*predicate)(void *node, void *state),
+        void *state);
+
+/** 
+ * Filter the list, removing any nodes that do not match the predicate O(n). 
+ * 
+ * RETURNS: The number of elements removed.
+ */
+size_t pmt_ll_filter(
+        pmt_ll_iface *iface, 
+        void *list, 
+        bool (*predicate)(void *node, void *state),
+        void *state);
+
+/**
+ * Reverse the list in place O(n).
+ * 
+ * RETURNS: The reversed list.
+ */
+void *pmt_ll_reverse(pmt_ll_iface *iface, void *list);
 
 #endif

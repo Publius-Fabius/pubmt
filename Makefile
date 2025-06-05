@@ -23,3 +23,5 @@ build/pubmt/linked_list.o : source/pubmt/linked_list.c \
 bin/test_linked_list: tests/pubmt/linked_list.c \
 	build/pubmt/linked_list.o 
 	$(CC) $(CFLAGS) -o $@ $^ 
+run_test_linked_list : bin/test_linked_list
+	valgrind -q --error-exitcode=1 --leak-check=full $^ 1>/dev/null

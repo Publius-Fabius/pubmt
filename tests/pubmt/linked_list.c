@@ -67,7 +67,7 @@ bool odds(void *node, void *state)
 }
 
 
-void test_push_front()
+void test_node_push_front()
 {
         my_node n1 = { .value = 1, .next = NULL };
         my_node n2 = { .value = 2, .next = NULL };
@@ -78,7 +78,7 @@ void test_push_front()
         assert(match_list(&n1, (int[]){ 1, 2, 3 }, 3));
 }
 
-void test_last()
+void test_node_last()
 {
         my_node n1 = { .value = 1, .next = NULL };
         my_node n2 = { .value = 2, .next = NULL };
@@ -93,7 +93,7 @@ void test_last()
         assert(match_list(&n1, (int[]){ 1, 2, 3 }, 3));
 }
 
-void test_count()
+void test_node_count()
 {
         my_node n1 = { .value = 1, .next = NULL };
         my_node n2 = { .value = 2, .next = NULL };
@@ -108,7 +108,7 @@ void test_count()
         assert(match_list(&n1, (int[]){ 1, 2, 3 }, 3));
 }
 
-void test_at()
+void test_node_at()
 {
         my_node n1 = { .value = 1, .next = NULL };
         my_node n2 = { .value = 2, .next = NULL };
@@ -132,7 +132,7 @@ void test_at()
         assert(pmt_ll_node_at(&my_node_iface, &n1, 3) == NULL);
 }
 
-void test_push_back()
+void test_node_push_back()
 {
         my_node n1 = { .value = 1, .next = NULL };
         my_node n2 = { .value = 2, .next = NULL };
@@ -148,7 +148,7 @@ void test_push_back()
         assert(pmt_ll_node_count(&my_node_iface, &n1) == 3);
 }
 
-void test_insert_after()
+void test_node_insert_after()
 {
         my_node n1 = { .value = 1, .next = NULL };
         my_node n2 = { .value = 2, .next = NULL };
@@ -163,7 +163,7 @@ void test_insert_after()
         assert(pmt_ll_node_count(&my_node_iface, &n1) == 3);
 }
 
-void test_remove_after()
+void test_node_remove_after()
 {
         my_node n1 = { .value = 1, .next = NULL };
         my_node n2 = { .value = 2, .next = NULL };
@@ -190,7 +190,8 @@ void test_remove_after()
 
         assert(pmt_ll_node_remove_after(&my_node_iface, &n1) == NULL);
 }
-void test_remove_first()
+
+void test_node_remove_first()
 {
         my_node nodes[5];
         my_node *list = init_list(nodes, 2);
@@ -211,7 +212,7 @@ void test_remove_first()
         assert(pmt_ll_node_remove_first(&my_node_iface, (void**)&ref) == NULL);
 }
 
-void test_remove_last()
+void test_node_remove_last()
 {
         my_node nodes[5];
         my_node *list = init_list(nodes, 2);
@@ -234,44 +235,7 @@ void test_remove_last()
         assert(pmt_ll_node_remove_last(&my_node_iface, (void**)&ref) == NULL);
 }
 
-void test_remove()
-{
-        my_node nodes[5];
-        my_node *list = init_list(nodes, 5);
-        assert(match_list(list, (int[]){ 1, 2, 3, 4, 5 }, 5));
-
-        my_node *ref = list;
-
-        my_node *rem = pmt_ll_node_at(&my_node_iface, ref, 2);
-
-        assert(pmt_ll_node_remove(&my_node_iface, (void**)&ref, rem) == rem);
-        assert(match_list(ref, (int[]){ 1, 2, 4, 5 }, 4));
-        assert(pmt_ll_node_count(&my_node_iface, ref) == 4);
-        
-        rem = pmt_ll_node_at(&my_node_iface, ref, 3);
-        assert(pmt_ll_node_remove(&my_node_iface, (void**)&ref, rem) == rem);
-        assert(match_list(ref, (int[]){ 1, 2, 4 }, 3));
-        assert(pmt_ll_node_count(&my_node_iface, ref) == 3);
-        
-        rem = pmt_ll_node_at(&my_node_iface, ref, 0);
-        assert(pmt_ll_node_remove(&my_node_iface, (void**)&ref, rem) == rem);
-        assert(match_list(ref, (int[]){ 2, 4 }, 2));
-        assert(pmt_ll_node_count(&my_node_iface, ref) == 2);
-
-        rem = pmt_ll_node_at(&my_node_iface, ref, 1);
-        assert(pmt_ll_node_remove(&my_node_iface, (void**)&ref, rem) == rem);
-        assert(match_list(ref, (int[]){ 2 }, 1));
-        assert(pmt_ll_node_count(&my_node_iface, ref) == 1);
-
-        rem = pmt_ll_node_at(&my_node_iface, ref, 0);
-        assert(pmt_ll_node_remove(&my_node_iface, (void**)&ref, rem) == rem);
-        assert(ref == NULL);
-
-        assert(pmt_ll_node_remove(&my_node_iface, (void**)&ref, rem) == NULL);
-        assert(ref == NULL);
-}
-
-void test_remove_when()
+void test_node_remove_when()
 {
         my_node nodes[5];
         my_node *list = init_list(nodes, 5);
@@ -323,7 +287,7 @@ void test_remove_when()
                 &my_node_iface, (void**)&ref, equals, (void*)&value) == NULL);
 }
 
-void test_filter()
+void test_node_filter()
 {
         my_node nodes[6];
         my_node *list = init_list(nodes, 6);
@@ -341,7 +305,7 @@ void test_filter()
         assert(pmt_ll_node_count(&my_node_iface, ref) == 3);
 }
 
-void test_find()
+void test_node_find()
 {
         my_node nodes[6];
         my_node *list = init_list(nodes, 6);
@@ -364,7 +328,7 @@ void test_find()
         assert(pmt_ll_node_find(&my_node_iface, list, equals, &num) == NULL);
 }
 
-void test_foreach()
+void test_node_foreach()
 {
         my_node nodes[6];
         my_node *list = init_list(nodes, 6);
@@ -376,7 +340,7 @@ void test_foreach()
         assert(pmt_ll_node_foreach(&my_node_iface, ref, odds, NULL) == false);
 }
 
-void test_reverse()
+void test_node_reverse()
 {
         my_node nodes[6];
         my_node *list = init_list(nodes, 5);
@@ -399,23 +363,396 @@ void test_reverse()
         assert(match_list(list, (int[]){ 1 }, 1));
 }
 
+typedef struct my_list {
+        my_node *first;
+        my_node *last;
+} my_list;
+
+void *get_first(void *list)
+{
+        return ((my_list*)list)->first;
+}
+void *get_last(void *list)
+{
+        return ((my_list*)list)->last;
+}
+
+void set_first(void *list, void *node)
+{
+        ((my_list*)list)->first = node;
+}
+
+void set_last(void *list, void *node)
+{
+        ((my_list*)list)->last = node;
+}
+
+
+pmt_ll_iface my_list_iface = {
+        .get_first = get_first,
+        .set_first = set_first,
+        .get_last = get_last,
+        .set_last = set_last,
+        .node_iface = {
+                .get_next = get_next,
+                .set_next = set_next
+        }
+};
+
+void test_push_front()
+{
+        my_node n1 = { .value = 1, .next = NULL };
+        my_node n2 = { .value = 2, .next = NULL };
+        my_node n3 = { .value = 3, .next = NULL };
+        my_list list = { .first = NULL, .last = NULL };
+
+        assert(pmt_ll_push_front(&my_list_iface, &list, &n3) == &list);
+        assert(match_list(list.first, (int[]){ 3 }, 1));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 1);
+        assert(list.first == list.last && list.last == &n3);
+
+        assert(pmt_ll_push_front(&my_list_iface, &list, &n2) == &list);
+        assert(match_list(list.first, (int[]){ 2, 3 }, 2));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 2);
+        assert(list.first == &n2 && list.last == &n3);
+
+        assert(pmt_ll_push_front(&my_list_iface, &list, &n1) == &list);
+        assert(match_list(list.first, (int[]){ 1, 2, 3 }, 3));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 3);
+        assert(list.first == &n1 && list.last == &n3);
+}
+
+void test_push_back()
+{
+        my_node n1 = { .value = 1, .next = NULL };
+        my_node n2 = { .value = 2, .next = NULL };
+        my_node n3 = { .value = 3, .next = NULL };
+        my_list list = { .first = NULL, .last = NULL };
+
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n1) == &list);
+        assert(match_list(list.first, (int[]){ 1 }, 1));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 1);
+        assert(list.first == list.last && list.last == &n1);
+
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n2) == &list);
+        assert(match_list(list.first, (int[]){ 1, 2 }, 2));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 2);
+        assert(list.first == &n1 && list.last == &n2);
+
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n3) == &list);
+        assert(match_list(list.first, (int[]){ 1, 2, 3 }, 3));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 3);
+        assert(list.first == &n1 && list.last == &n3);
+}
+
+void test_insert_after()
+{
+        my_node n1 = { .value = 1, .next = NULL };
+        my_node n2 = { .value = 2, .next = NULL };
+        my_node n3 = { .value = 3, .next = NULL };
+        my_list list = { .first = NULL, .last = NULL };
+
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n1) == &list);
+        assert(match_list(list.first, (int[]){ 1 }, 1));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 1);
+        assert(list.first == list.last && list.last == &n1);
+
+        assert(pmt_ll_insert_after(&my_list_iface, &list, &n1, &n3) == &list);
+        assert(match_list(list.first, (int[]){ 1, 3 }, 2));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 2);
+        assert(list.first == &n1 && list.last == &n3);
+
+        assert(pmt_ll_insert_after(&my_list_iface, &list, &n1, &n2) == &list);
+        assert(match_list(list.first, (int[]){ 1, 2, 3 }, 3));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 3);
+        assert(list.first == &n1 && list.last == &n3);
+}
+
+void test_remove_after()
+{
+        my_node n1 = { .value = 1, .next = NULL };
+        my_node n2 = { .value = 2, .next = NULL };
+        my_node n3 = { .value = 3, .next = NULL };
+        my_list list = { .first = NULL, .last = NULL };
+
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n1) == &list);
+        assert(match_list(list.first, (int[]){ 1 }, 1));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 1);
+        assert(list.first == list.last && list.last == &n1);
+
+        assert(pmt_ll_insert_after(&my_list_iface, &list, &n1, &n3) == &list);
+        assert(match_list(list.first, (int[]){ 1, 3 }, 2));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 2);
+        assert(list.first == &n1 && list.last == &n3);
+
+        assert(pmt_ll_insert_after(&my_list_iface, &list, &n1, &n2) == &list);
+        assert(match_list(list.first, (int[]){ 1, 2, 3 }, 3));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 3);
+        assert(list.first == &n1 && list.last == &n3);
+
+        assert(pmt_ll_remove_after(&my_list_iface, &list, &n1) == &n2);
+        assert(match_list(list.first, (int[]){ 1, 3 }, 2));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 2);
+        assert(n2.next == NULL);
+        assert(list.first == &n1 && list.last == &n3);
+
+        assert(pmt_ll_remove_after(&my_list_iface, &list, &n1) == &n3);
+        assert(match_list(list.first, (int[]){ 1 }, 1));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 1);
+        assert(n1.next == NULL);
+        assert(list.first == &n1 && list.last == &n1);
+}
+
+void test_remove_first()
+{
+        my_node n1 = { .value = 1, .next = NULL };
+        my_node n2 = { .value = 2, .next = NULL };
+        my_node n3 = { .value = 3, .next = NULL };
+        my_list list = { .first = NULL, .last = NULL };
+
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n1) == &list);
+        assert(match_list(list.first, (int[]){ 1 }, 1));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 1);
+        assert(list.first == list.last && list.last == &n1);
+
+        assert(pmt_ll_insert_after(&my_list_iface, &list, &n1, &n3) == &list);
+        assert(match_list(list.first, (int[]){ 1, 3 }, 2));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 2);
+        assert(list.first == &n1 && list.last == &n3);
+
+        assert(pmt_ll_insert_after(&my_list_iface, &list, &n1, &n2) == &list);
+        assert(match_list(list.first, (int[]){ 1, 2, 3 }, 3));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 3);
+        assert(list.first == &n1 && list.last == &n3);
+
+        assert(pmt_ll_remove_first(&my_list_iface, &list) == &n1);
+        assert(match_list(list.first, (int[]){ 2, 3 }, 2));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 2);
+        assert(n1.next == NULL);
+        assert(list.first == &n2 && list.last == &n3);
+
+        assert(pmt_ll_remove_first(&my_list_iface, &list) == &n2);
+        assert(match_list(list.first, (int[]){ 3 }, 1));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 1);
+        assert(n2.next == NULL);
+        assert(list.first == &n3 && list.last == &n3);
+
+        assert(pmt_ll_remove_first(&my_list_iface, &list) == &n3);
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 0);
+        assert(n3.next == NULL);
+        assert(list.first == NULL && list.last == NULL);
+}
+
+void test_remove_last()
+{
+        my_node n1 = { .value = 1, .next = NULL };
+        my_node n2 = { .value = 2, .next = NULL };
+        my_node n3 = { .value = 3, .next = NULL };
+        my_list list = { .first = NULL, .last = NULL };
+
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n1) == &list);
+        assert(match_list(list.first, (int[]){ 1 }, 1));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 1);
+        assert(list.first == list.last && list.last == &n1);
+
+        assert(pmt_ll_insert_after(&my_list_iface, &list, &n1, &n3) == &list);
+        assert(match_list(list.first, (int[]){ 1, 3 }, 2));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 2);
+        assert(list.first == &n1 && list.last == &n3);
+
+        assert(pmt_ll_insert_after(&my_list_iface, &list, &n1, &n2) == &list);
+        assert(match_list(list.first, (int[]){ 1, 2, 3 }, 3));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 3);
+        assert(list.first == &n1 && list.last == &n3);
+
+        assert(pmt_ll_remove_last(&my_list_iface, &list) == &n3);
+        assert(match_list(list.first, (int[]){ 1, 2 }, 2));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 2);
+        assert(n3.next == NULL);
+        assert(list.first == &n1 && list.last == &n2);
+
+        assert(pmt_ll_remove_last(&my_list_iface, &list) == &n2);
+        assert(match_list(list.first, (int[]){ 1 }, 1));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 1);
+        assert(n2.next == NULL);
+        assert(list.first == &n1 && list.last == &n1);
+
+        assert(pmt_ll_remove_last(&my_list_iface, &list) == &n1);
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 0);
+        assert(n1.next == NULL);
+        assert(list.first == NULL && list.last == NULL);
+}
+
+void test_remove_when()
+{
+        my_node n1 = { .value = 1, .next = NULL };
+        my_node n2 = { .value = 2, .next = NULL };
+        my_node n3 = { .value = 3, .next = NULL };
+        my_node n4 = { .value = 4, .next = NULL };
+        my_node n5 = { .value = 5, .next = NULL };
+
+        my_list list = { .first = NULL, .last = NULL };
+
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n1) == &list);
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n2) == &list);
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n3) == &list);
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n4) == &list);
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n5) == &list);
+        assert(match_list(list.first, (int[]){ 1, 2, 3, 4, 5 }, 5));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 5);
+        
+        int value = 3;
+        assert(pmt_ll_remove_when(
+                &my_list_iface, &list, equals, &value) == &n3);
+        assert(match_list(list.first, (int[]){ 1, 2, 4, 5 }, 4));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 4);
+        assert(n3.next == NULL);
+        assert(list.first == &n1 && list.last == &n5);
+
+        value = 1;
+        assert(pmt_ll_remove_when(
+                &my_list_iface, &list, equals, &value) == &n1);
+        assert(match_list(list.first, (int[]){ 2, 4, 5 }, 3));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 3);
+        assert(n1.next == NULL);
+        assert(list.first == &n2 && list.last == &n5);
+
+        value = 5;
+        assert(pmt_ll_remove_when(
+                &my_list_iface, &list, equals, &value) == &n5);
+        assert(match_list(list.first, (int[]){ 2, 4 }, 2));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 2);
+        assert(n5.next == NULL);
+        assert(list.first == &n2 && list.last == &n4);
+
+        value = 2;
+        assert(pmt_ll_remove_when(
+                &my_list_iface, &list, equals, &value) == &n2);
+        assert(match_list(list.first, (int[]){ 4 }, 1));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 1);
+        assert(n2.next == NULL);
+        assert(list.first == &n4 && list.last == &n4);
+
+        value = 10;
+        assert(pmt_ll_remove_when(
+                &my_list_iface, &list, equals, &value) == NULL);
+        assert(match_list(list.first, (int[]){ 4 }, 1));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 1);
+        assert(n2.next == NULL);
+        assert(list.first == &n4 && list.last == &n4);
+
+        value = 4;
+        assert(pmt_ll_remove_when(
+                &my_list_iface, &list, equals, &value) == &n4);
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 0);
+        assert(n4.next == NULL);
+        assert(list.first == NULL && list.last == NULL);
+}
+
+void test_filter()
+{
+        my_node n1 = { .value = 1, .next = NULL };
+        my_node n2 = { .value = 2, .next = NULL };
+        my_node n3 = { .value = 3, .next = NULL };
+        my_node n4 = { .value = 4, .next = NULL };
+        my_node n5 = { .value = 5, .next = NULL };
+        my_node n6 = { .value = 6, .next = NULL };
+        my_list list = { .first = NULL, .last = NULL };
+
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n1) == &list);
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n2) == &list);
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n3) == &list);
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n4) == &list);
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n5) == &list);
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n6) == &list);
+        assert(match_list(list.first, (int[]){ 1, 2, 3, 4, 5, 6 }, 6));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 6);
+        
+        assert(pmt_ll_filter(
+                &my_list_iface, &list, evens, NULL) == 3);
+        assert(match_list(list.first, (int[]){ 2, 4, 6 }, 3));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 3);
+        assert(list.first == &n2 && list.last == &n6);
+
+        assert(pmt_ll_filter(
+                &my_list_iface, &list, odds, NULL) == 3);
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 0);
+        assert(list.first == NULL && list.last == NULL);
+
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n1) == &list);
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n2) == &list);
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n3) == &list);
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n4) == &list);
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n5) == &list);
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n6) == &list);
+        assert(match_list(list.first, (int[]){ 1, 2, 3, 4, 5, 6 }, 6));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 6);
+
+        assert(pmt_ll_filter(
+                &my_list_iface, &list, odds, NULL) == 3);
+        assert(match_list(list.first, (int[]){ 1, 3, 5 }, 3));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 3);
+        assert(list.first == &n1 && list.last == &n5);
+
+        assert(pmt_ll_filter(
+                &my_list_iface, &list, evens, NULL) == 3);
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 0);
+        assert(list.first == NULL && list.last == NULL);
+}
+
+void test_reverse()
+{
+        my_node n1 = { .value = 1, .next = NULL };
+        my_node n2 = { .value = 2, .next = NULL };
+        my_node n3 = { .value = 3, .next = NULL };
+        my_node n4 = { .value = 4, .next = NULL };
+        my_node n5 = { .value = 5, .next = NULL };
+        my_node n6 = { .value = 6, .next = NULL };
+        my_list list = { .first = NULL, .last = NULL };
+
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n1) == &list);
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n2) == &list);
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n3) == &list);
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n4) == &list);
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n5) == &list);
+        assert(pmt_ll_push_back(&my_list_iface, &list, &n6) == &list);
+        assert(match_list(list.first, (int[]){ 1, 2, 3, 4, 5, 6 }, 6));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 6);
+        
+        assert(pmt_ll_reverse(&my_list_iface, &list) == &list);
+        assert(match_list(list.first, (int[]){ 6, 5, 4, 3, 2, 1 }, 6));
+        assert(pmt_ll_node_count(&my_node_iface, list.first) == 6);
+        assert(list.first == &n6 && list.last == &n1);
+}
+
 int main(int argc, char **args) 
 {
         puts("testing - linked_list.c");
+
+        test_node_push_front();
+        test_node_last();
+        test_node_count();
+        test_node_at();
+        test_node_push_back();
+        test_node_insert_after();
+        test_node_remove_after();
+        test_node_remove_first();
+        test_node_remove_last();
+        test_node_remove_when();
+        test_node_filter();
+        test_node_find();
+        test_node_foreach();
+        test_node_reverse();
+
         test_push_front();
-        test_last();
-        test_count();
-        test_at();
         test_push_back();
         test_insert_after();
         test_remove_after();
         test_remove_first();
         test_remove_last();
-        test_remove();
         test_remove_when();
         test_filter();
-        test_find();
-        test_foreach();
         test_reverse();
+
         return 0;
 }
