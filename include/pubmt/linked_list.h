@@ -196,7 +196,7 @@ typedef struct pmt_ll_iface {
  * 
  * RETURNS: true if empty, otherwise false.
  */
-bool pmt_ll_isempty(pmt_ll_iface *iface, void *list);
+bool pmt_ll_is_empty(pmt_ll_iface *iface, void *list);
 
 /** 
  * Push 'first', an unlinked node, onto the front of the list O(1). 
