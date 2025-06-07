@@ -25,3 +25,15 @@ bin/test_linked_list: tests/pubmt/linked_list.c \
 	$(CC) $(CFLAGS) -o $@ $^ 
 run_test_linked_list : bin/test_linked_list
 	valgrind -q --error-exitcode=1 --leak-check=full $^ 1>/dev/null
+
+build/pubmt/dynamic_array.o : source/pubmt/dynamic_array.c \
+	include/pubmt/dynamic_array.h \
+	scaffold 
+	$(CC) $(CFLAGS) -c -o $@ $<
+bin/test_dynamic_array: tests/pubmt/dynamic_array.c \
+	build/pubmt/dynamic_array.o 
+	$(CC) $(CFLAGS) -o $@ $^ 
+run_test_dynamic_array : bin/test_dynamic_array
+	valgrind -q --error-exitcode=1 --leak-check=full $^ 1>/dev/null
+
+
