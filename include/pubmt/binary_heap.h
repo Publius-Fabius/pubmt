@@ -7,8 +7,8 @@
 /** Swap the contents of the two elements. */
 typedef void (*pmt_bh_swap_t)(void *element_a, void *element_b);
 
-/** Compare element_a to element_b [ -1 = less, 0 = equals, 1 = greater ]. */
-typedef int (*pmt_bh_compare_t)(void *element_a, void *element_b);
+/** Is element_a less than element_b? */
+typedef bool (*pmt_bh_less_than_t)(void *element_a, void *element_b);
 
 /** Binary Heap Interface */
 typedef struct pmt_bh_iface {
@@ -17,7 +17,7 @@ typedef struct pmt_bh_iface {
 
         pmt_bh_swap_t (*get_swap)(void *heap);
 
-        pmt_bh_compare_t (*get_compare)(void *heap);
+        pmt_bh_less_than_t (*get_less_than)(void *heap);
 
 } pmt_bh_iface;
 
@@ -28,7 +28,7 @@ typedef struct pmt_bh_iface {
  * @returns A pointer to the pushed element is returned.  A value of 'NULL' 
  * indicates a memory allocation failure.
  */
-void *pmt_bh_insert(pmt_bh_iface *iface, void *array, void *element);
+void *pmt_bh_insert(pmt_bh_iface *iface, void *heap, void *element);
 
 /**
  * Pop the minimal/maximal element from the heap.  If 'element' is not 'NULL',
@@ -36,13 +36,13 @@ void *pmt_bh_insert(pmt_bh_iface *iface, void *array, void *element);
  * 
  * @returns A value of 'false' is returned if the heap is empty.
  */
-bool pmt_bh_pop(pmt_bh_iface iface, void *heap, void *element);
+bool pmt_bh_pop(pmt_bh_iface *iface, void *heap, void *element);
 
 /** 
  * Get a pointer to the minimal/maximal element. 
  * 
  * @returns A value of 'false' is returned if the heap is empty.
  */
-void *pmt_bh_peek(pmt_bh_iface iface, void *heap);
+void *pmt_bh_peek(pmt_bh_iface *iface, void *heap);
 
 #endif

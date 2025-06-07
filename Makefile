@@ -36,6 +36,18 @@ bin/test_dynamic_array: tests/pubmt/dynamic_array.c \
 run_test_dynamic_array : bin/test_dynamic_array
 	valgrind -q --error-exitcode=1 --leak-check=full $^ 1>/dev/null
 
+build/pubmt/binary_heap.o : source/pubmt/binary_heap.c \
+	include/pubmt/binary_heap.h \
+	scaffold 
+	$(CC) $(CFLAGS) -c -o $@ $<
+bin/test_binary_heap: tests/pubmt/binary_heap.c \
+	build/pubmt/binary_heap.o \
+	build/pubmt/dynamic_array.o
+	$(CC) $(CFLAGS) -o $@ $^ 
+run_test_binary_heap : bin/test_binary_heap
+	valgrind -q --error-exitcode=1 --leak-check=full $^ 1>/dev/null
+
 suite: \
 	run_test_linked_list \
-	run_test_dynamic_array
+	run_test_dynamic_array \
+	run_test_binary_heap
