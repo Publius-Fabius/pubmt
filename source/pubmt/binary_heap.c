@@ -92,20 +92,14 @@ static void pmt_bh_heapify_down(
 
 void *pmt_bh_insert(pmt_bh_iface *iface, void *heap, void *elem)
 {
-        #ifndef NDEBUG
-                if(     !heap || 
-                        !elem || 
-                        !iface ||
-                        !iface->get_less_than ||
-                        !iface->get_swap ||
-                        !iface->array_iface.get_buffer ||
-                        !iface->array_iface.get_size ||
-                        !iface->array_iface.get_element_size)
-                {
-                        assert(0);
-                        return NULL;
-                }
-        #endif
+        assert(heap);
+        assert(elem);
+        assert(iface);
+        assert(iface->get_less_than);
+        assert(iface->get_swap);
+        assert(iface->array_iface.get_buffer);
+        assert(iface->array_iface.get_size);
+        assert(iface->array_iface.get_element_size);
 
         pmt_da_iface *a_iface = &iface->array_iface;
         
@@ -125,20 +119,14 @@ void *pmt_bh_insert(pmt_bh_iface *iface, void *heap, void *elem)
 
 bool pmt_bh_pop(pmt_bh_iface *iface, void *heap, void *elem)
 {
-        #ifndef NDEBUG
-                if(     !heap || 
-                        !iface ||
-                        !iface->get_less_than ||
-                        !iface->get_swap ||
-                        !iface->array_iface.get_buffer ||
-                        !iface->array_iface.get_size ||
-                        !iface->array_iface.get_element_size)
-                {
-                        assert(0);
-                        return false;
-                }
-        #endif
-        
+        assert(heap);
+        assert(iface);
+        assert(iface->get_less_than);
+        assert(iface->get_swap);
+        assert(iface->array_iface.get_buffer);
+        assert(iface->array_iface.get_size);
+        assert(iface->array_iface.get_element_size);
+
         pmt_da_iface *a_iface = &iface->array_iface;
 
         const size_t elem_size = a_iface->get_element_size(heap);
@@ -174,14 +162,7 @@ bool pmt_bh_pop(pmt_bh_iface *iface, void *heap, void *elem)
 
 void *pmt_bh_peek(pmt_bh_iface *iface, void *heap)
 {
-        #ifndef NDEBUG
-                if(     !heap || 
-                        !iface)
-                {
-                        assert(0);
-                        return false;
-                }
-        #endif
-
+        assert(heap);
+        assert(iface);
         return pmt_da_first(&iface->array_iface, heap);
 }

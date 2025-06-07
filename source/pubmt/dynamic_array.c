@@ -12,18 +12,12 @@ void *pmt_da_init(
         const size_t size,
         const size_t initial_capacity)
 {
-        #ifndef NDEBUG 
-                if(     !array ||
-                        !iface || 
-                        !iface->set_size || 
-                        !iface->set_capacity || 
-                        !iface->set_buffer)
-                {
-                        assert(0);
-                        return NULL;
-                }
-        #endif
-
+        assert(array);
+        assert(iface);
+        assert(iface->set_size);
+        assert(iface->set_capacity);
+        assert(iface->set_buffer);
+      
         iface->set_size(array, size);
         iface->set_capacity(array, initial_capacity);
         iface->set_buffer(array, buffer);
@@ -36,18 +30,12 @@ void *pmt_da_create(
         void *array, 
         const size_t initial_capacity)
 {
-        #ifndef NDEBUG 
-                if(     !array ||
-                        !iface || 
-                        !iface->get_alloc || 
-                        !iface->get_alloc_state || 
-                        !iface->get_element_size)
-                {
-                        assert(0);
-                        return NULL;
-                }
-        #endif
-
+        assert(array);
+        assert(iface);
+        assert(iface->get_alloc);
+        assert(iface->get_alloc_state);
+        assert(iface->get_element_size);
+   
         pmt_da_alloc_t alloc = iface->get_alloc(array);
         void *alloc_state = iface->get_alloc_state(array);
         const size_t element_size = iface->get_element_size(array);
@@ -62,17 +50,12 @@ void *pmt_da_create(
 
 void pmt_da_destroy(pmt_da_iface *iface, void *array)
 {
-        #ifndef NDEBUG 
-                if(     !array ||
-                        !iface || 
-                        !iface->get_free ||
-                        !iface->get_alloc_state || 
-                        !iface->get_buffer)
-                {
-                        assert(0);
-                }
-        #endif
-        
+        assert(array);
+        assert(iface);
+        assert(iface->get_free);
+        assert(iface->get_alloc_state);
+        assert(iface->get_buffer);
+
         pmt_da_free_t free = iface->get_free(array);
         void *alloc_state = iface->get_alloc_state(array);
 
@@ -81,14 +64,9 @@ void pmt_da_destroy(pmt_da_iface *iface, void *array)
 
 void pmt_da_clear(pmt_da_iface *iface, void *array)
 {
-        #ifndef NDEBUG 
-                if(     !array ||
-                        !iface || 
-                        !iface->set_size)
-                {
-                        assert(0);
-                }
-        #endif
+        assert(array);
+        assert(iface);
+        assert(iface->set_size);
 
         iface->set_size(array, 0);
 }
@@ -99,17 +77,11 @@ bool pmt_da_zero_buffer(
         const size_t index, 
         const size_t length)
 {
-        #ifndef NDEBUG 
-                if(     !array ||
-                        !iface || 
-                        !iface->get_buffer ||
-                        !iface->get_element_size ||
-                        !iface->get_capacity)
-                {
-                        assert(0);
-                        return NULL;
-                }
-        #endif
+        assert(array);
+        assert(iface);
+        assert(iface->get_buffer);
+        assert(iface->get_element_size);
+        assert(iface->get_capacity);
 
         uint8_t *bytes = iface->get_buffer(array);
         const size_t 
@@ -127,32 +99,20 @@ bool pmt_da_zero_buffer(
 
 bool pmt_da_is_empty(pmt_da_iface *iface, void *array)
 {
-        #ifndef NDEBUG 
-                if(     !array ||
-                        !iface || 
-                        !iface->get_size)
-                {
-                        assert(0);
-                        return NULL;
-                }
-        #endif
+        assert(array);
+        assert(iface);
+        assert(iface->get_size);
         
         return iface->get_size(array) == 0;
 }
 
 void *pmt_da_at(pmt_da_iface *iface, void *array, const size_t index)
 {
-        #ifndef NDEBUG 
-                if(     !array ||
-                        !iface || 
-                        !iface->get_size ||
-                        !iface->get_element_size ||
-                        !iface->get_buffer)
-                {
-                        assert(0);
-                        return NULL;
-                }
-        #endif
+        assert(array);
+        assert(iface);
+        assert(iface->get_size);
+        assert(iface->get_element_size);
+        assert(iface->get_buffer);
 
         const size_t size = iface->get_size(array);
         if(index >= size) {
@@ -170,22 +130,15 @@ bool pmt_da_resize(
         void *array, 
         const size_t new_cap)
 {
-        #ifndef NDEBUG 
-                if(     !array ||
-                        !iface || 
-                        !iface->get_size ||
-                        !iface->set_capacity ||
-                        !iface->get_element_size ||
-                        !iface->get_buffer ||
-                        !iface->set_buffer ||
-                        !iface->get_realloc ||
-                        !iface->get_alloc_state ||
-                        !iface->get_free)
-                {
-                        assert(0);
-                        return NULL;
-                }
-        #endif
+        assert(array);
+        assert(iface);
+        assert(iface->get_size);
+        assert(iface->set_capacity);
+        assert(iface->get_element_size);
+        assert(iface->get_buffer);
+        assert(iface->set_buffer);
+        assert(iface->get_realloc);
+        assert(iface->get_alloc_state);
 
         if(iface->get_size(array) > new_cap) {
                 return false;
@@ -210,16 +163,10 @@ bool pmt_da_resize(
 
 bool pmt_da_shrink_to_fit(pmt_da_iface *iface, void *array)
 {
-        #ifndef NDEBUG 
-                if(     !array ||
-                        !iface || 
-                        !iface->get_size ||
-                        !iface->get_capacity)
-                {
-                        assert(0);
-                        return NULL;
-                }
-        #endif
+        assert(array);
+        assert(iface);
+        assert(iface->get_size);
+        assert(iface->get_capacity);
 
         const size_t    size = iface->get_size(array),
                         capacity = iface->get_capacity(array);
@@ -238,15 +185,9 @@ bool pmt_da_reserve(
         void *array,
         const size_t new_capacity)
 {
-        #ifndef NDEBUG 
-                if(     !array ||
-                        !iface || 
-                        !iface->get_capacity)
-                {
-                        assert(0);
-                        return NULL;
-                }
-        #endif
+        assert(array);
+        assert(iface);
+        assert(iface->get_capacity);
 
         const size_t capacity = iface->get_capacity(array);
         
@@ -286,15 +227,9 @@ bool pmt_da_scale_capacity(
         void *array,
         const size_t want_cap)
 {
-        #ifndef NDEBUG 
-                if(     !array ||
-                        !iface || 
-                        !iface->get_capacity)
-                {
-                        assert(0);
-                        return NULL;
-                }
-        #endif
+        assert(array);
+        assert(iface);
+        assert(iface->get_capacity);
 
         const size_t capacity = iface->get_capacity(array);
         if(want_cap <= capacity) {
@@ -314,19 +249,13 @@ bool pmt_da_scale_capacity(
 
 void *pmt_da_push_back(pmt_da_iface *iface, void *array, void *elem)
 {
-        #ifndef NDEBUG 
-                if(     !array ||
-                        !iface || 
-                        !iface->get_size ||
-                        !iface->set_size ||
-                        !iface->get_capacity ||
-                        !iface->get_buffer ||
-                        !iface->get_element_size)
-                {
-                        assert(0);
-                        return NULL;
-                }
-        #endif
+        assert(array);
+        assert(iface);
+        assert(iface->get_size);
+        assert(iface->set_size);
+        assert(iface->get_capacity);
+        assert(iface->get_buffer);
+        assert(iface->get_element_size);
 
         const size_t    size = iface->get_size(array),
                         elem_size = iface->get_element_size(array),
@@ -354,17 +283,11 @@ void *pmt_da_push_back(pmt_da_iface *iface, void *array, void *elem)
 
 bool pmt_da_pop_back(pmt_da_iface *iface, void *array, void *elem)
 {
-        #ifndef NDEBUG 
-                if(     !array ||
-                        !iface || 
-                        !iface->get_size ||
-                        !iface->set_size ||
-                        !iface->get_buffer)
-                {
-                        assert(0);
-                        return NULL;
-                }
-        #endif
+        assert(array);
+        assert(iface);
+        assert(iface->get_size);
+        assert(iface->set_size);
+        assert(iface->get_buffer);
 
         const size_t    size = iface->get_size(array),
                         last = size - 1;
@@ -385,17 +308,11 @@ bool pmt_da_pop_back(pmt_da_iface *iface, void *array, void *elem)
 
 void *pmt_da_first(pmt_da_iface *iface, void *array)
 {
-        #ifndef NDEBUG 
-                if(     !array ||
-                        !iface || 
-                        !iface->get_size ||
-                        !iface->get_buffer)
-                {
-                        assert(0);
-                        return NULL;
-                }
-        #endif
-
+        assert(array);
+        assert(iface);
+        assert(iface->get_size);
+        assert(iface->get_buffer);
+ 
         const size_t size = iface->get_size(array);
         if(!size) {
                 return NULL;
@@ -406,16 +323,10 @@ void *pmt_da_first(pmt_da_iface *iface, void *array)
 
 void *pmt_da_last(pmt_da_iface *iface, void *array)
 {
-        #ifndef NDEBUG 
-                if(     !array ||
-                        !iface || 
-                        !iface->get_size ||
-                        !iface->get_buffer)
-                {
-                        assert(0);
-                        return NULL;
-                }
-        #endif
+        assert(array);
+        assert(iface);
+        assert(iface->get_size);
+        assert(iface->get_buffer);
 
         const size_t    size = iface->get_size(array),
                         elem_size = iface->get_element_size(array);
@@ -438,19 +349,13 @@ bool pmt_da_insert_range(
         void *elems, 
         const size_t nelems)
 {
-        #ifndef NDEBUG 
-                if(     !array ||
-                        !iface || 
-                        !iface->get_size ||
-                        !iface->set_size ||
-                        !iface->get_capacity ||
-                        !iface->get_buffer ||
-                        !iface->get_element_size)
-                {
-                        assert(0);
-                        return false;
-                }
-        #endif
+        assert(array);
+        assert(iface);
+        assert(iface->get_size);
+        assert(iface->set_size);
+        assert(iface->get_capacity);
+        assert(iface->get_buffer);
+        assert(iface->get_element_size);
 
         const size_t    size = iface->get_size(array),
                         cap = iface->get_capacity(array),
@@ -486,18 +391,12 @@ bool pmt_da_remove_range(
         const size_t index, 
         const size_t nelems)
 {
-        #ifndef NDEBUG 
-                if(     !array ||
-                        !iface || 
-                        !iface->get_size ||
-                        !iface->set_size ||
-                        !iface->get_buffer ||
-                        !iface->get_element_size)
-                {
-                        assert(0);
-                        return false;
-                }
-        #endif
+        assert(array);
+        assert(iface);
+        assert(iface->get_size);
+        assert(iface->set_size);
+        assert(iface->get_buffer);
+        assert(iface->get_element_size);
 
         const size_t    elem_size = iface->get_element_size(array),
                         size = iface->get_size(array),
