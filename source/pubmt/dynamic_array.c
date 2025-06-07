@@ -312,7 +312,7 @@ bool pmt_da_scale_capacity(
         return pmt_da_resize(iface, array, new_cap);
 }
 
-void *pmt_da_push_back(pmt_da_iface *iface, void *array, const void *elem)
+void *pmt_da_push_back(pmt_da_iface *iface, void *array, void *elem)
 {
         #ifndef NDEBUG 
                 if(     !array ||

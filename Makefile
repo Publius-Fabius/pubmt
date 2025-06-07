@@ -36,4 +36,6 @@ bin/test_dynamic_array: tests/pubmt/dynamic_array.c \
 run_test_dynamic_array : bin/test_dynamic_array
 	valgrind -q --error-exitcode=1 --leak-check=full $^ 1>/dev/null
 
-
+suite: \
+	run_test_linked_list \
+	run_test_dynamic_array

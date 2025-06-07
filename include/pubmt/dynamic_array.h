@@ -152,7 +152,7 @@ bool pmt_da_scale_capacity(
  * @returns A pointer to the pushed element is returned.  A value of 'NULL' 
  * indicates a memory allocation failure.
  */
-void *pmt_da_push_back(pmt_da_iface *iface, void *array, const void *element);
+void *pmt_da_push_back(pmt_da_iface *iface, void *array, void *element);
 
 /**
  * Remove the last element from the array.  If element is not NULL, then it 
