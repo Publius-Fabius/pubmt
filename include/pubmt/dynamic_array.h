@@ -9,6 +9,7 @@ typedef void *(*pmt_da_alloc_t)(
         const size_t nbytes, 
         void *alloc_state);
 
+/** Reallocate pointer to hold nbytes of data. */
 typedef void *(*pmt_da_realloc_t)(
         void *pointer, 
         const size_t nbytes, 
