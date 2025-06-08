@@ -47,7 +47,19 @@ bin/test_binary_heap: tests/pubmt/binary_heap.c \
 run_test_binary_heap : bin/test_binary_heap
 	valgrind -q --error-exitcode=1 --leak-check=full $^ 1>/dev/null
 
+build/pubmt/byte_stack.o : source/pubmt/byte_stack.c \
+	include/pubmt/byte_stack.h \
+	scaffold 
+	$(CC) $(CFLAGS) -c -o $@ $<
+bin/test_byte_stack: tests/pubmt/byte_stack.c \
+	build/pubmt/byte_stack.o \
+	build/pubmt/dynamic_array.o
+	$(CC) $(CFLAGS) -o $@ $^ 
+run_test_byte_stack : bin/test_byte_stack
+	valgrind -q --error-exitcode=1 --leak-check=full $^ 1>/dev/null
+
 suite: \
 	run_test_linked_list \
 	run_test_dynamic_array \
-	run_test_binary_heap
+	run_test_binary_heap \
+	run_test_byte_stack

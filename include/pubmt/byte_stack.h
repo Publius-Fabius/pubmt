@@ -23,15 +23,15 @@ typedef struct pmt_byte_stack {
 pmt_byte_stack_t *pmt_bs_init(
         pmt_byte_stack_t *stack, 
         void *buffer,
-        const size_t length, 
-        const size_t offset);
+        const size_t offset,
+        const size_t length);
 
 /** 
  * Reset the stack and zero its buffer.
  * 
  * @returns A pointer to the stack is returned.
  */
-pmt_byte_stack_t *pmt_da_zero(pmt_byte_stack_t *stack);
+pmt_byte_stack_t *pmt_bs_zero(pmt_byte_stack_t *stack);
 
 /** 
  * Reset the stack, removing all its contents. 
@@ -41,11 +41,12 @@ pmt_byte_stack_t *pmt_da_zero(pmt_byte_stack_t *stack);
 pmt_byte_stack_t *pmt_bs_reset(pmt_byte_stack_t *stack);
 
 /** 
- * Push nbytes onto the stack. 
+ * Push nbytes onto the stack.  If the argument 'data' is not NULL, then the
+ * pushed region will receive its contents.
  * 
  * @returns A pointer to the pushed region.
  */
-void *pmt_bs_push(pmt_byte_stack_t *stack, const size_t nbytes);
+void *pmt_bs_push(pmt_byte_stack_t *stack, const size_t nbytes, void *data);
 
 /** 
  * Pop nbytes from the stack.  If the argument 'data' is not NULL, then 
