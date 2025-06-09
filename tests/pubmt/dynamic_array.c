@@ -81,7 +81,7 @@ void *get_alloc_state(void *array)
         return NULL;
 }
 
-pmt_da_iface my_iface = {
+pmt_da_iface_t my_iface = {
         .get_alloc = get_alloc,
         .get_realloc = get_realloc,
         .get_alloc_state = get_alloc_state,

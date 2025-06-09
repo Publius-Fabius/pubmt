@@ -3,9 +3,9 @@ CFLAGS = -g -std=c11 -pedantic -Wconversion -Wall -I include
 CC = gcc
 
 clean:
-	rm -r build/pubmt 
-	rm -r build 
-	rm -r bin
+	rm -r build/pubmt || true
+	rm -r build || true
+	rm -r bin || true
 
 build:
 	mkdir build

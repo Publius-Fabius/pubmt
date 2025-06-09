@@ -2,12 +2,12 @@
 #include "pubmt/linked_list.h"
 #include <assert.h>
 
-static inline bool pmt_ll_node_iface_tst(pmt_ll_node_iface *i)
+static inline bool pmt_ll_node_iface_tst(pmt_ll_node_iface_t *i)
 {
         return i && i->get_next && i->set_next;
 }
 
-void *pmt_ll_node_last(pmt_ll_node_iface *iface, void *list)
+void *pmt_ll_node_last(pmt_ll_node_iface_t *iface, void *list)
 {
         assert(iface);
         assert(pmt_ll_node_iface_tst(iface));
@@ -19,7 +19,7 @@ void *pmt_ll_node_last(pmt_ll_node_iface *iface, void *list)
         return node;
 }
 
-size_t pmt_ll_node_count(pmt_ll_node_iface *iface, void *list)
+size_t pmt_ll_node_count(pmt_ll_node_iface_t *iface, void *list)
 {
         assert(iface);
         assert(pmt_ll_node_iface_tst(iface));
@@ -31,7 +31,7 @@ size_t pmt_ll_node_count(pmt_ll_node_iface *iface, void *list)
         return count;
 }
 
-void *pmt_ll_node_at(pmt_ll_node_iface *iface, void *list, const size_t index)
+void *pmt_ll_node_at(pmt_ll_node_iface_t *iface, void *list, const size_t index)
 {
         assert(iface);
         assert(pmt_ll_node_iface_tst(iface));
@@ -46,7 +46,7 @@ void *pmt_ll_node_at(pmt_ll_node_iface *iface, void *list, const size_t index)
         return list;
 }
 
-void *pmt_ll_node_push_front(pmt_ll_node_iface *iface, void *list, void *fst)
+void *pmt_ll_node_push_front(pmt_ll_node_iface_t *iface, void *list, void *fst)
 {
         assert(fst);
         assert(iface);
@@ -57,7 +57,7 @@ void *pmt_ll_node_push_front(pmt_ll_node_iface *iface, void *list, void *fst)
         return fst;
 }
 
-void *pmt_ll_node_push_back(pmt_ll_node_iface *iface, void *list, void *last)
+void *pmt_ll_node_push_back(pmt_ll_node_iface_t *iface, void *list, void *last)
 {
         assert(last);
         assert(iface);
@@ -75,7 +75,7 @@ void *pmt_ll_node_push_back(pmt_ll_node_iface *iface, void *list, void *last)
 }
 
 void *pmt_ll_node_insert_after(
-        pmt_ll_node_iface *iface, 
+        pmt_ll_node_iface_t *iface, 
         void *node, 
         void *succ)
 {
@@ -93,7 +93,7 @@ void *pmt_ll_node_insert_after(
         return node;
 }
 
-void *pmt_ll_node_remove_after(pmt_ll_node_iface *iface, void *node)
+void *pmt_ll_node_remove_after(pmt_ll_node_iface_t *iface, void *node)
 {
         assert(node);
         assert(iface);
@@ -109,7 +109,7 @@ void *pmt_ll_node_remove_after(pmt_ll_node_iface *iface, void *node)
         }
 }
 
-void *pmt_ll_node_remove_first(pmt_ll_node_iface *iface, void **ref)
+void *pmt_ll_node_remove_first(pmt_ll_node_iface_t *iface, void **ref)
 {
         assert(ref);
         assert(iface);
@@ -125,7 +125,7 @@ void *pmt_ll_node_remove_first(pmt_ll_node_iface *iface, void **ref)
 }
 
 void *pmt_ll_node_remove_last_args(
-        pmt_ll_node_iface *iface, 
+        pmt_ll_node_iface_t *iface, 
         void **list_ref,
         void **pred_ref)
 {
@@ -154,14 +154,14 @@ void *pmt_ll_node_remove_last_args(
         return node;
 }
 
-void *pmt_ll_node_remove_last(pmt_ll_node_iface *iface, void **ref)
+void *pmt_ll_node_remove_last(pmt_ll_node_iface_t *iface, void **ref)
 {
         void *pred_ref;
         return pmt_ll_node_remove_last_args(iface, ref, &pred_ref);
 }
 
 void *pmt_ll_node_remove_when_args(
-        pmt_ll_node_iface *iface, 
+        pmt_ll_node_iface_t *iface, 
         void **list_ref, 
         bool (*predicate)(void *node, void *state),
         void *state,
@@ -202,7 +202,7 @@ void *pmt_ll_node_remove_when_args(
 }
 
 void *pmt_ll_node_remove_when(
-        pmt_ll_node_iface *iface, 
+        pmt_ll_node_iface_t *iface, 
         void **ref, 
         bool (*predicate)(void *node, void *state),
         void *state)
@@ -213,7 +213,7 @@ void *pmt_ll_node_remove_when(
 }
 
 size_t pmt_ll_node_filter_args(
-        pmt_ll_node_iface *iface, 
+        pmt_ll_node_iface_t *iface, 
         void **first_ref, 
         bool (*predicate)(void *node, void *state),
         void *state,
@@ -255,7 +255,7 @@ size_t pmt_ll_node_filter_args(
 }
 
 size_t pmt_ll_node_filter(
-        pmt_ll_node_iface *iface, 
+        pmt_ll_node_iface_t *iface, 
         void **list, 
         bool (*predicate)(void *node, void *state),
         void *state)
@@ -266,7 +266,7 @@ size_t pmt_ll_node_filter(
 }
 
 void *pmt_ll_node_find(
-        pmt_ll_node_iface *iface, 
+        pmt_ll_node_iface_t *iface, 
         void *node,
         bool (*predicate)(void *node, void *state),
         void *state)
@@ -285,7 +285,7 @@ void *pmt_ll_node_find(
 }
 
 bool pmt_ll_node_foreach(
-        pmt_ll_node_iface *iface, 
+        pmt_ll_node_iface_t *iface, 
         void *node, 
         bool (*callback)(void *node, void *state),
         void *state)
@@ -303,7 +303,7 @@ bool pmt_ll_node_foreach(
         return true;
 }
 
-void *pmt_ll_node_reverse(pmt_ll_node_iface *iface, void *list)
+void *pmt_ll_node_reverse(pmt_ll_node_iface_t *iface, void *list)
 {
         assert(iface);
         assert(pmt_ll_node_iface_tst(iface));
@@ -320,7 +320,7 @@ void *pmt_ll_node_reverse(pmt_ll_node_iface *iface, void *list)
         return head;
 }
 
-static inline bool pmt_ll_iface_tst(pmt_ll_iface *i)
+static inline bool pmt_ll_iface_tst(pmt_ll_iface_t *i)
 {
         return  i && 
                 i->get_first && 
@@ -329,7 +329,7 @@ static inline bool pmt_ll_iface_tst(pmt_ll_iface *i)
                 i->set_last;
 }
 
-void *pmt_ll_push_front(pmt_ll_iface *iface, void *list, void *first)
+void *pmt_ll_push_front(pmt_ll_iface_t *iface, void *list, void *first)
 {
         assert(list);
         assert(first);
@@ -337,7 +337,7 @@ void *pmt_ll_push_front(pmt_ll_iface *iface, void *list, void *first)
         assert(pmt_ll_iface_tst(iface));
         assert(pmt_ll_node_iface_tst(&iface->node_iface));
 
-        pmt_ll_node_iface *n_iface = &iface->node_iface;
+        pmt_ll_node_iface_t *n_iface = &iface->node_iface;
 
         assert(n_iface->get_next(first) == NULL);
         
@@ -355,7 +355,7 @@ void *pmt_ll_push_front(pmt_ll_iface *iface, void *list, void *first)
         return list;
 }
 
-void *pmt_ll_push_back(pmt_ll_iface *iface, void *list, void *last)
+void *pmt_ll_push_back(pmt_ll_iface_t *iface, void *list, void *last)
 {
         assert(list);
         assert(last);
@@ -363,7 +363,7 @@ void *pmt_ll_push_back(pmt_ll_iface *iface, void *list, void *last)
         assert(pmt_ll_iface_tst(iface));
         assert(pmt_ll_node_iface_tst(&iface->node_iface));
 
-        pmt_ll_node_iface *n_iface = &iface->node_iface;
+        pmt_ll_node_iface_t *n_iface = &iface->node_iface;
 
         void *node = iface->get_last(list);
 
@@ -381,7 +381,7 @@ void *pmt_ll_push_back(pmt_ll_iface *iface, void *list, void *last)
 }
 
 void *pmt_ll_insert_after(
-        pmt_ll_iface *iface, 
+        pmt_ll_iface_t *iface, 
         void *list, 
         void *node,
         void *succ)
@@ -406,7 +406,7 @@ void *pmt_ll_insert_after(
         return list;
 }
 
-void *pmt_ll_remove_after(pmt_ll_iface *iface, void *list, void *node)
+void *pmt_ll_remove_after(pmt_ll_iface_t *iface, void *list, void *node)
 {
         assert(list);
         assert(iface);
@@ -428,14 +428,14 @@ void *pmt_ll_remove_after(pmt_ll_iface *iface, void *list, void *node)
         return dropped;
 }
 
-void *pmt_ll_remove_first(pmt_ll_iface *iface, void *list)
+void *pmt_ll_remove_first(pmt_ll_iface_t *iface, void *list)
 {
         assert(list);
         assert(iface);
         assert(pmt_ll_iface_tst(iface));
         assert(pmt_ll_node_iface_tst(&iface->node_iface));
 
-        pmt_ll_node_iface *n_iface = &iface->node_iface;
+        pmt_ll_node_iface_t *n_iface = &iface->node_iface;
         void *first = iface->get_first(list);
         void *last = iface->get_last(list);
 
@@ -454,7 +454,7 @@ void *pmt_ll_remove_first(pmt_ll_iface *iface, void *list)
         return first;
 }
 
-void *pmt_ll_remove_last(pmt_ll_iface *iface, void *list)
+void *pmt_ll_remove_last(pmt_ll_iface_t *iface, void *list)
 {
         assert(list);
         assert(iface);
@@ -485,7 +485,7 @@ void *pmt_ll_remove_last(pmt_ll_iface *iface, void *list)
 }
 
 void *pmt_ll_remove_when(
-        pmt_ll_iface *iface, 
+        pmt_ll_iface_t *iface, 
         void *list, 
         bool (*predicate)(void *node, void *state),
         void *state)
@@ -519,7 +519,7 @@ void *pmt_ll_remove_when(
 }
 
 size_t pmt_ll_filter(
-        pmt_ll_iface *iface, 
+        pmt_ll_iface_t *iface, 
         void *list, 
         bool (*predicate)(void *node, void *state),
         void *state)
@@ -539,7 +539,7 @@ size_t pmt_ll_filter(
         return removed;
 }
 
-void *pmt_ll_reverse(pmt_ll_iface *iface, void *list)
+void *pmt_ll_reverse(pmt_ll_iface_t *iface, void *list)
 {
         assert(list);
         assert(iface);

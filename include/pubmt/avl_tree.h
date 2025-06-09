@@ -11,17 +11,20 @@ typedef bool (*pmt_avl_less_than_t)(void *key_a, void *key_b);
 typedef struct pmt_avl_iface {
 
         void *(*get_left)(void *node);
+        void (*set_left)(void *node, void *left);
+
         void *(*get_right)(void *node);
+        void (*set_right)(void *node, void *right);
 
         void *(*get_key)(void *node);
 
-        size_t get_height(void *node);
-        void set_height(void *node, const size_t height);
+        size_t (*get_height)(void *node);
+        void (*set_height)(void *node, const size_t height);
 
         pmt_avl_less_than_t (*get_less_than)(void *tree);
 
-        size_t get_size(void *tree);
-        void set_size(void *tree, const size_t size);
+        size_t (*get_size)(void *tree);
+        void (*set_size)(void *tree, const size_t size);
 
 } pmt_avl_iface_t;
 

@@ -44,7 +44,7 @@ typedef struct pmt_da_iface {
         void *(*get_buffer)(void *array);
         void (*set_buffer)(void *array, void *buffer_ptr);
 
-} pmt_da_iface;
+} pmt_da_iface_t;
 
 /** 
  * Initialize the dynamic array with the given buffer and initial capacity. 
@@ -52,7 +52,7 @@ typedef struct pmt_da_iface {
  * @returns A pointer to 'array'.
  */
 void *pmt_da_init(
-        pmt_da_iface *iface, 
+        pmt_da_iface_t *iface, 
         void *array, 
         void *buffer,
         const size_t size,
@@ -64,19 +64,19 @@ void *pmt_da_init(
  * @returns A pointer to 'array' or NULL if memory allocation failed.
  */
 void *pmt_da_create(
-        pmt_da_iface *iface, 
+        pmt_da_iface_t *iface, 
         void *array, 
         const size_t initial_capacity);
 
 /** 
  * Destroy the dynamic array, freeing its internal buffer.
  */    
-void pmt_da_destroy(pmt_da_iface *iface, void *array);
+void pmt_da_destroy(pmt_da_iface_t *iface, void *array);
 
 /** 
  * Clear the dynamic array, removing all its elements.
  */
-void pmt_da_clear(pmt_da_iface *iface, void *array);
+void pmt_da_clear(pmt_da_iface_t *iface, void *array);
 
 /** 
  * Zero internal buffer memory length elems from index.  This operation 
@@ -86,7 +86,7 @@ void pmt_da_clear(pmt_da_iface *iface, void *array);
  * bounds, no memory would be zeroed in this case.
  */
 bool pmt_da_zero_buffer(
-        pmt_da_iface *iface, 
+        pmt_da_iface_t *iface, 
         void *array, 
         const size_t index, 
         const size_t length);
@@ -96,7 +96,7 @@ bool pmt_da_zero_buffer(
  * 
  * @returns A true value indicates the array was empty, otherwise false.
  */
-bool pmt_da_is_empty(pmt_da_iface *iface, void *array);
+bool pmt_da_is_empty(pmt_da_iface_t *iface, void *array);
 
 /**
  * Get the element at the given index O(1). 
@@ -104,7 +104,7 @@ bool pmt_da_is_empty(pmt_da_iface *iface, void *array);
  * @returns A pointer to the element is returned.  If the 'index' is out of 
  * bounds, then NULL is returned instead.
  */
-void *pmt_da_at(pmt_da_iface *iface, void *array, const size_t index);
+void *pmt_da_at(pmt_da_iface_t *iface, void *array, const size_t index);
 
 /** 
  * Resize the array, ensuring it can hold new_capacity elements.
@@ -113,7 +113,7 @@ void *pmt_da_at(pmt_da_iface *iface, void *array, const size_t index);
  * error.
  */
 bool pmt_da_resize(
-        pmt_da_iface *iface, 
+        pmt_da_iface_t *iface, 
         void *array, 
         const size_t new_capacity);
 
@@ -123,7 +123,7 @@ bool pmt_da_resize(
  * @returns A value of 'false' is returned if there was a memory allocation 
  * error.
  */
-bool pmt_da_shrink_to_fit(pmt_da_iface *iface, void *array);
+bool pmt_da_shrink_to_fit(pmt_da_iface_t *iface, void *array);
 
 /**
  * Reserve nelems of internal buffer space.
@@ -131,7 +131,7 @@ bool pmt_da_shrink_to_fit(pmt_da_iface *iface, void *array);
  * @returns A value of 'false' is returned if there was a memory allocation 
  * error.
  */
-bool pmt_da_reserve( pmt_da_iface *iface, void *array, const size_t nelems);
+bool pmt_da_reserve( pmt_da_iface_t *iface, void *array, const size_t nelems);
 
 /**
  * Increase the capacity by a natural number power of the array's scaling 
@@ -141,7 +141,7 @@ bool pmt_da_reserve( pmt_da_iface *iface, void *array, const size_t nelems);
  * array's scaling factor is less than or equal to 1, then false is returned.
  */
 bool pmt_da_scale_capacity(
-        pmt_da_iface *iface, 
+        pmt_da_iface_t *iface, 
         void *array,
         const size_t ensured_capacity);
 
@@ -153,7 +153,7 @@ bool pmt_da_scale_capacity(
  * @returns A pointer to the pushed element is returned.  A value of 'NULL' 
  * indicates a memory allocation failure.
  */
-void *pmt_da_push_back(pmt_da_iface *iface, void *array, void *element);
+void *pmt_da_push_back(pmt_da_iface_t *iface, void *array, void *element);
 
 /**
  * Remove the last element from the array.  If element is not NULL, then it 
@@ -161,7 +161,7 @@ void *pmt_da_push_back(pmt_da_iface *iface, void *array, void *element);
  * 
  * @returns If false is returned, the array was empty.
  */
-bool pmt_da_pop_back(pmt_da_iface *iface, void *array, void *element);
+bool pmt_da_pop_back(pmt_da_iface_t *iface, void *array, void *element);
 
 /**
  * Get a pointer to the first element. 
@@ -169,7 +169,7 @@ bool pmt_da_pop_back(pmt_da_iface *iface, void *array, void *element);
  * @returns A pointer to the first element is returned, other NULL if the array
  * is empty.
  */
-void *pmt_da_first(pmt_da_iface *iface, void *array);
+void *pmt_da_first(pmt_da_iface_t *iface, void *array);
 
 /**
  * Get a pointer to the last element. 
@@ -177,7 +177,7 @@ void *pmt_da_first(pmt_da_iface *iface, void *array);
  * @returns A pointer to the last element is returned, other NULL if the array
  * is empty.
  */
-void *pmt_da_last(pmt_da_iface *iface, void *array);
+void *pmt_da_last(pmt_da_iface_t *iface, void *array);
 
 /**
  * Insert nelems elements at the given index. 
@@ -185,7 +185,7 @@ void *pmt_da_last(pmt_da_iface *iface, void *array);
  * @returns A value of false is returned if the allocator ran out of memory.
  */
 bool pmt_da_insert_range(
-        pmt_da_iface *iface, 
+        pmt_da_iface_t *iface, 
         void *array, 
         const size_t index,
         void *elements, 
@@ -198,7 +198,7 @@ bool pmt_da_insert_range(
  * gone out of bounds, indicating no modifications were made to the array.
  */
 bool pmt_da_remove_range(
-        pmt_da_iface *iface, 
+        pmt_da_iface_t *iface, 
         void *array,
         const size_t index, 
         const size_t nelems);

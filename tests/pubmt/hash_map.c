@@ -124,7 +124,7 @@ pmt_hm_hash_t get_hash(void *map)
         return hash;
 }
 
-pmt_hm_iface my_iface = {
+pmt_hm_iface_t my_iface = {
         .array_iface = {
                 .get_alloc = get_alloc,
                 .get_realloc = get_realloc,

@@ -13,9 +13,9 @@ typedef size_t (*pmt_hm_hash_t)(void *key);
 /** Hash Map Callback Interface */
 typedef struct pmt_hm_iface {
         
-        pmt_ll_node_iface node_iface;
+        pmt_ll_node_iface_t node_iface;
 
-        pmt_da_iface array_iface;
+        pmt_da_iface_t array_iface;
 
         void *(*get_key)(void *node);
 
@@ -23,7 +23,7 @@ typedef struct pmt_hm_iface {
 
         pmt_hm_hash_t (*get_hash)(void *map);
 
-} pmt_hm_iface;
+} pmt_hm_iface_t;
 
 /** Hash Map Iterator */
 typedef struct pmt_hm_iter {
@@ -42,14 +42,14 @@ typedef struct pmt_hm_iter {
  * @return map
  */
 void *pmt_hm_create(
-        pmt_hm_iface *iface, 
+        pmt_hm_iface_t *iface, 
         void *map, 
         const size_t initial_capacity);
 
 /**
  * Destroy the hash map.
  */
-void pmt_hm_destroy(pmt_hm_iface *iface, void *map);
+void pmt_hm_destroy(pmt_hm_iface_t *iface, void *map);
 
 /**
  * Resize the hash map's internal buffer.
@@ -57,7 +57,7 @@ void pmt_hm_destroy(pmt_hm_iface *iface, void *map);
  * @returns A value of 'false' is returned when memory allocation fails.
  */
 bool pmt_hm_resize(
-        pmt_hm_iface *iface, 
+        pmt_hm_iface_t *iface, 
         void *map, 
         const size_t new_capacity);
 
@@ -66,38 +66,38 @@ bool pmt_hm_resize(
  * 
  * @returns A value of 'false' is returned when memory allocation fails.
  */
-bool pmt_hm_insert(pmt_hm_iface *iface, void *map, void *node);
+bool pmt_hm_insert(pmt_hm_iface_t *iface, void *map, void *node);
 
 /**
  * Lookup the node with the given key. 
  * 
  * @returns The node with the given key, otherwise NULL.
  */
-void *pmt_hm_lookup(pmt_hm_iface *iface, void *map, void *key);
+void *pmt_hm_lookup(pmt_hm_iface_t *iface, void *map, void *key);
 
 /**
  * Remove the node from the hash map.
  * 
  * @returns The removed node if it exists, otherwise NULL.
  */
-void *pmt_hm_remove(pmt_hm_iface *iface, void *map, void *key);
+void *pmt_hm_remove(pmt_hm_iface_t *iface, void *map, void *key);
 
 /**
  * Get an iterator to the beginning of the hash map.
  */
-void pmt_hm_entries(pmt_hm_iface *iface, void *map, pmt_hm_iter_t *iter);
+void pmt_hm_entries(pmt_hm_iface_t *iface, void *map, pmt_hm_iter_t *iter);
 
 /**
  * Get the next node in the iteration.
  * 
  * @returns A value of 'false' indicates the iteration has ended.
  */
-bool pmt_hm_next(pmt_hm_iface *iface, pmt_hm_iter_t *iter, void **node);
+bool pmt_hm_next(pmt_hm_iface_t *iface, pmt_hm_iter_t *iter, void **node);
 
 /** 
  * Does the iterator have a next node?
  */
-bool pmt_hm_is_next(pmt_hm_iface *iface, pmt_hm_iter_t *iter);
+bool pmt_hm_is_next(pmt_hm_iface_t *iface, pmt_hm_iter_t *iter);
 
 /**
  * FNV hash nbytes of src.

@@ -6,7 +6,7 @@
 #include <math.h>
 
 void *pmt_da_init(
-        pmt_da_iface *iface, 
+        pmt_da_iface_t *iface, 
         void *array, 
         void *buffer,
         const size_t size,
@@ -26,7 +26,7 @@ void *pmt_da_init(
 }
 
 void *pmt_da_create(
-        pmt_da_iface *iface, 
+        pmt_da_iface_t *iface, 
         void *array, 
         const size_t initial_capacity)
 {
@@ -48,7 +48,7 @@ void *pmt_da_create(
         return pmt_da_init(iface, array, buffer, 0, initial_capacity);
 }
 
-void pmt_da_destroy(pmt_da_iface *iface, void *array)
+void pmt_da_destroy(pmt_da_iface_t *iface, void *array)
 {
         assert(array);
         assert(iface);
@@ -62,7 +62,7 @@ void pmt_da_destroy(pmt_da_iface *iface, void *array)
         free(iface->get_buffer(array), alloc_state);
 }
 
-void pmt_da_clear(pmt_da_iface *iface, void *array)
+void pmt_da_clear(pmt_da_iface_t *iface, void *array)
 {
         assert(array);
         assert(iface);
@@ -72,7 +72,7 @@ void pmt_da_clear(pmt_da_iface *iface, void *array)
 }
 
 bool pmt_da_zero_buffer(
-        pmt_da_iface *iface, 
+        pmt_da_iface_t *iface, 
         void *array, 
         const size_t index, 
         const size_t length)
@@ -97,7 +97,7 @@ bool pmt_da_zero_buffer(
         return true;
 }
 
-bool pmt_da_is_empty(pmt_da_iface *iface, void *array)
+bool pmt_da_is_empty(pmt_da_iface_t *iface, void *array)
 {
         assert(array);
         assert(iface);
@@ -106,7 +106,7 @@ bool pmt_da_is_empty(pmt_da_iface *iface, void *array)
         return iface->get_size(array) == 0;
 }
 
-void *pmt_da_at(pmt_da_iface *iface, void *array, const size_t index)
+void *pmt_da_at(pmt_da_iface_t *iface, void *array, const size_t index)
 {
         assert(array);
         assert(iface);
@@ -126,7 +126,7 @@ void *pmt_da_at(pmt_da_iface *iface, void *array, const size_t index)
 }
 
 bool pmt_da_resize(
-        pmt_da_iface *iface, 
+        pmt_da_iface_t *iface, 
         void *array, 
         const size_t new_cap)
 {
@@ -161,7 +161,7 @@ bool pmt_da_resize(
         return true;
 }
 
-bool pmt_da_shrink_to_fit(pmt_da_iface *iface, void *array)
+bool pmt_da_shrink_to_fit(pmt_da_iface_t *iface, void *array)
 {
         assert(array);
         assert(iface);
@@ -181,7 +181,7 @@ bool pmt_da_shrink_to_fit(pmt_da_iface *iface, void *array)
 }
 
 bool pmt_da_reserve( 
-        pmt_da_iface *iface, 
+        pmt_da_iface_t *iface, 
         void *array,
         const size_t new_capacity)
 {
@@ -223,7 +223,7 @@ static bool pmt_da_find_scaled_capacity(
 }
 
 bool pmt_da_scale_capacity(
-        pmt_da_iface *iface, 
+        pmt_da_iface_t *iface, 
         void *array,
         const size_t want_cap)
 {
@@ -247,7 +247,7 @@ bool pmt_da_scale_capacity(
         return pmt_da_resize(iface, array, new_cap);
 }
 
-void *pmt_da_push_back(pmt_da_iface *iface, void *array, void *elem)
+void *pmt_da_push_back(pmt_da_iface_t *iface, void *array, void *elem)
 {
         assert(array);
         assert(iface);
@@ -281,7 +281,7 @@ void *pmt_da_push_back(pmt_da_iface *iface, void *array, void *elem)
        return pointer;
 }
 
-bool pmt_da_pop_back(pmt_da_iface *iface, void *array, void *elem)
+bool pmt_da_pop_back(pmt_da_iface_t *iface, void *array, void *elem)
 {
         assert(array);
         assert(iface);
@@ -306,7 +306,7 @@ bool pmt_da_pop_back(pmt_da_iface *iface, void *array, void *elem)
         return true;
 }
 
-void *pmt_da_first(pmt_da_iface *iface, void *array)
+void *pmt_da_first(pmt_da_iface_t *iface, void *array)
 {
         assert(array);
         assert(iface);
@@ -321,7 +321,7 @@ void *pmt_da_first(pmt_da_iface *iface, void *array)
         return iface->get_buffer(array);
 }
 
-void *pmt_da_last(pmt_da_iface *iface, void *array)
+void *pmt_da_last(pmt_da_iface_t *iface, void *array)
 {
         assert(array);
         assert(iface);
@@ -343,7 +343,7 @@ void *pmt_da_last(pmt_da_iface *iface, void *array)
 #include <stdio.h>
 
 bool pmt_da_insert_range(
-        pmt_da_iface *iface, 
+        pmt_da_iface_t *iface, 
         void *array, 
         const size_t index,
         void *elems, 
@@ -386,7 +386,7 @@ bool pmt_da_insert_range(
 }
 
 bool pmt_da_remove_range(
-        pmt_da_iface *iface, 
+        pmt_da_iface_t *iface, 
         void *array,
         const size_t index, 
         const size_t nelems)

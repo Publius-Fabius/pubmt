@@ -90,7 +90,7 @@ static void pmt_bh_heapify_down(
         }
 }
 
-void *pmt_bh_insert(pmt_bh_iface *iface, void *heap, void *elem)
+void *pmt_bh_insert(pmt_bh_iface_t *iface, void *heap, void *elem)
 {
         assert(heap);
         assert(elem);
@@ -101,7 +101,7 @@ void *pmt_bh_insert(pmt_bh_iface *iface, void *heap, void *elem)
         assert(iface->array_iface.get_size);
         assert(iface->array_iface.get_element_size);
 
-        pmt_da_iface *a_iface = &iface->array_iface;
+        pmt_da_iface_t *a_iface = &iface->array_iface;
         
         const size_t index = a_iface->get_size(heap);
 
@@ -117,7 +117,7 @@ void *pmt_bh_insert(pmt_bh_iface *iface, void *heap, void *elem)
                 index);
 }
 
-bool pmt_bh_pop(pmt_bh_iface *iface, void *heap, void *elem)
+bool pmt_bh_pop(pmt_bh_iface_t *iface, void *heap, void *elem)
 {
         assert(heap);
         assert(iface);
@@ -127,7 +127,7 @@ bool pmt_bh_pop(pmt_bh_iface *iface, void *heap, void *elem)
         assert(iface->array_iface.get_size);
         assert(iface->array_iface.get_element_size);
 
-        pmt_da_iface *a_iface = &iface->array_iface;
+        pmt_da_iface_t *a_iface = &iface->array_iface;
 
         const size_t elem_size = a_iface->get_element_size(heap);
 
@@ -160,7 +160,7 @@ bool pmt_bh_pop(pmt_bh_iface *iface, void *heap, void *elem)
         return true;
 }
 
-void *pmt_bh_peek(pmt_bh_iface *iface, void *heap)
+void *pmt_bh_peek(pmt_bh_iface_t *iface, void *heap)
 {
         assert(heap);
         assert(iface);

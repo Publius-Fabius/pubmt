@@ -103,7 +103,7 @@ void *get_alloc_state(void *array)
         return NULL;
 }
 
-pmt_bh_iface my_iface = {
+pmt_bh_iface_t my_iface = {
         .get_swap = get_swap,
         .get_less_than = get_less_than,
         .array_iface = {

@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 void *pmt_hm_create(
-        pmt_hm_iface *iface, 
+        pmt_hm_iface_t *iface, 
         void *map, 
         const size_t init_cap)
 {
@@ -20,20 +20,20 @@ void *pmt_hm_create(
         return map;
 }
 
-void pmt_hm_destroy(pmt_hm_iface *iface, void *map)
+void pmt_hm_destroy(pmt_hm_iface_t *iface, void *map)
 {
         assert(iface);
 
         pmt_da_destroy(&iface->array_iface, map);
 }
 
-bool pmt_hm_resize(pmt_hm_iface *iface, void *map, const size_t new_cap)
+bool pmt_hm_resize(pmt_hm_iface_t *iface, void *map, const size_t new_cap)
 {
         assert(iface);
         assert(iface->get_hash);
         assert(iface->get_key);
 
-        pmt_da_iface *array_iface = &iface->array_iface;
+        pmt_da_iface_t *array_iface = &iface->array_iface;
         assert(array_iface->get_alloc);
         assert(array_iface->get_free);
         assert(array_iface->get_alloc_state);
@@ -42,7 +42,7 @@ bool pmt_hm_resize(pmt_hm_iface *iface, void *map, const size_t new_cap)
         assert(array_iface->get_buffer);
         assert(array_iface->set_buffer);
 
-        pmt_ll_node_iface *node_iface = &iface->node_iface;
+        pmt_ll_node_iface_t *node_iface = &iface->node_iface;
         assert(node_iface->set_next);
 
         assert(array_iface->get_capacity(map) <= new_cap);
@@ -97,7 +97,7 @@ static bool pmt_hm_predicate(void *node, void *state)
         return args->equals(args->get_key(node), args->key);
 }
 
-bool pmt_hm_insert(pmt_hm_iface *iface, void *map, void *node)
+bool pmt_hm_insert(pmt_hm_iface_t *iface, void *map, void *node)
 {
         assert(iface);
         assert(map);
@@ -107,13 +107,13 @@ bool pmt_hm_insert(pmt_hm_iface *iface, void *map, void *node)
         assert(iface->get_key);
         assert(iface->get_equals);
 
-        pmt_da_iface *array_iface = &iface->array_iface;
+        pmt_da_iface_t *array_iface = &iface->array_iface;
         assert(array_iface->get_buffer);
         assert(array_iface->get_capacity);
         assert(array_iface->get_size);
         assert(array_iface->set_size);
 
-        pmt_ll_node_iface *node_iface = &iface->node_iface;
+        pmt_ll_node_iface_t *node_iface = &iface->node_iface;
 
         const size_t new_size = array_iface->get_size(map) + 1;
         
@@ -154,7 +154,7 @@ bool pmt_hm_insert(pmt_hm_iface *iface, void *map, void *node)
 }
 
 
-void *pmt_hm_lookup(pmt_hm_iface *iface, void *map, void *key)
+void *pmt_hm_lookup(pmt_hm_iface_t *iface, void *map, void *key)
 {
         assert(iface);
         assert(map);
@@ -164,11 +164,11 @@ void *pmt_hm_lookup(pmt_hm_iface *iface, void *map, void *key)
         assert(iface->get_key);
         assert(iface->get_equals);
 
-        pmt_da_iface *array_iface = &iface->array_iface;
+        pmt_da_iface_t *array_iface = &iface->array_iface;
         assert(array_iface->get_buffer);
         assert(array_iface->get_capacity);
 
-        pmt_ll_node_iface *node_iface = &iface->node_iface;
+        pmt_ll_node_iface_t *node_iface = &iface->node_iface;
 
         const size_t capacity = array_iface->get_capacity(map);
 
@@ -183,7 +183,7 @@ void *pmt_hm_lookup(pmt_hm_iface *iface, void *map, void *key)
         return pmt_ll_node_find(node_iface, bucket, pmt_hm_predicate, &args);
 }
 
-void *pmt_hm_remove(pmt_hm_iface *iface, void *map, void *key)
+void *pmt_hm_remove(pmt_hm_iface_t *iface, void *map, void *key)
 {
         assert(iface);
         assert(map);
@@ -193,13 +193,13 @@ void *pmt_hm_remove(pmt_hm_iface *iface, void *map, void *key)
         assert(iface->get_key);
         assert(iface->get_equals);
 
-        pmt_da_iface *array_iface = &iface->array_iface;
+        pmt_da_iface_t *array_iface = &iface->array_iface;
         assert(array_iface->get_buffer);
         assert(array_iface->get_capacity);
         assert(array_iface->get_size);
         assert(array_iface->get_size);
 
-        pmt_ll_node_iface *node_iface = &iface->node_iface;
+        pmt_ll_node_iface_t *node_iface = &iface->node_iface;
 
         const size_t capacity = array_iface->get_capacity(map);
 
@@ -226,13 +226,13 @@ void *pmt_hm_remove(pmt_hm_iface *iface, void *map, void *key)
         return removed_node;
 }
 
-void pmt_hm_entries(pmt_hm_iface *iface, void *map, pmt_hm_iter_t *iter)
+void pmt_hm_entries(pmt_hm_iface_t *iface, void *map, pmt_hm_iter_t *iter)
 {
         assert(iface);
         assert(map);
         assert(iter);
 
-        pmt_da_iface *array_iface = &iface->array_iface;
+        pmt_da_iface_t *array_iface = &iface->array_iface;
         assert(array_iface->get_buffer);
 
         iter->bucket = 0;
@@ -241,18 +241,18 @@ void pmt_hm_entries(pmt_hm_iface *iface, void *map, pmt_hm_iter_t *iter)
 }
 
 bool pmt_hm_next(
-        pmt_hm_iface *iface,
+        pmt_hm_iface_t *iface,
         pmt_hm_iter_t *iter,
         void **node)
 {
         assert(iface);
         assert(iter);
 
-        pmt_da_iface *array_iface = &iface->array_iface;
+        pmt_da_iface_t *array_iface = &iface->array_iface;
         assert(array_iface->get_capacity);
         assert(array_iface->get_buffer);
 
-        pmt_ll_node_iface *node_iface = &iface->node_iface;
+        pmt_ll_node_iface_t *node_iface = &iface->node_iface;
 
         const size_t capacity = array_iface->get_capacity(iter->map);
 

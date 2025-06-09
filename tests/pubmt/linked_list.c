@@ -4,9 +4,9 @@
 #include <assert.h>
 #include <string.h>
 
-typedef struct my_node_t {
+typedef struct my_node {
         int value;
-        struct my_node_t *next;
+        struct my_node *next;
 } my_node_t;
 
 void *get_next(void *node)
@@ -19,7 +19,7 @@ void set_next(void *node, void *next)
         ((my_node_t*)(node))->next = next;
 }
 
-pmt_ll_node_iface my_node_iface = {
+pmt_ll_node_iface_t my_node_iface = {
         .get_next = get_next,
         .set_next = set_next
 };
@@ -388,7 +388,7 @@ void set_last(void *list, void *node)
 }
 
 
-pmt_ll_iface my_list_iface = {
+pmt_ll_iface_t my_list_iface = {
         .get_first = get_first,
         .set_first = set_first,
         .get_last = get_last,
