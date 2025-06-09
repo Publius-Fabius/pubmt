@@ -273,6 +273,16 @@ void test_remove()
         assert(!pmt_hm_lookup(&my_iface, &map, &key));
         assert(map.size == 3);
 
+        key = 2;
+        assert(pmt_hm_remove(&my_iface, &map, &key));
+        assert(!pmt_hm_lookup(&my_iface, &map, &key));
+        assert(map.size == 2);
+
+        key = 3;
+        assert(pmt_hm_remove(&my_iface, &map, &key));
+        assert(!pmt_hm_lookup(&my_iface, &map, &key));
+        assert(map.size == 1);
+
         pmt_hm_destroy(&my_iface, &map);
 }
 

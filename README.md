@@ -6,5 +6,5 @@ A collection of useful tools conspicuously absent from standard C.
 - pubmt/dynamic_array.h - Dynamic Array Callback Interface (Full Coverage)
 - pubmt/binary_heap.h - Binary Heap Callback Interface (Full Coverage) 
 - pubmt/hash_map.h - Hash Map Callback Interface (Full Coverage) 
-- pubmt/byte_stack - Downward Growing Byte Stack (Full Coverage)
-
+- pubmt/byte_stack.h - Downward Growing Byte Stack (Full Coverage)
+- pubmt/avl_tree.h - AVL Search Tree Callback Interface (Untested)
