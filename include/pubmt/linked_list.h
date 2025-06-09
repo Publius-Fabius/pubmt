@@ -6,8 +6,11 @@
 
 /** Linked List Node Interface */
 typedef struct pmt_ll_node_iface {
+
         void *(*get_next)(void *node);
+
         void (*set_next)(void *node, void *next);
+        
 } pmt_ll_node_iface;
 
 /** 

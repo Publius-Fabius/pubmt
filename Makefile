@@ -58,8 +58,21 @@ bin/test_byte_stack: tests/pubmt/byte_stack.c \
 run_test_byte_stack : bin/test_byte_stack
 	valgrind -q --error-exitcode=1 --leak-check=full $^ 1>/dev/null
 
+build/pubmt/hash_map.o : source/pubmt/hash_map.c \
+	include/pubmt/hash_map.h \
+	scaffold 
+	$(CC) $(CFLAGS) -c -o $@ $<
+bin/test_hash_map: tests/pubmt/hash_map.c \
+	build/pubmt/hash_map.o \
+	build/pubmt/dynamic_array.o \
+	build/pubmt/linked_list.o 
+	$(CC) $(CFLAGS) -o $@ $^ 
+run_test_hash_map : bin/test_hash_map
+	valgrind -q --error-exitcode=1 --leak-check=full $^ 1>/dev/null
+
 suite: \
 	run_test_linked_list \
 	run_test_dynamic_array \
 	run_test_binary_heap \
-	run_test_byte_stack
+	run_test_byte_stack \
+	run_test_hash_map

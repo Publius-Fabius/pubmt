@@ -7,25 +7,21 @@
 /** Are the nodes equal? */
 typedef bool (*pmt_hm_equals_t)(void *key_a, void *key_b);
 
-/** Hash the node. */
-typedef size_t (*pmt_hm_hash_t)(void *node);
+/** Hash the key. */
+typedef size_t (*pmt_hm_hash_t)(void *key);
 
 /** Hash Map Callback Interface */
 typedef struct pmt_hm_iface {
         
-        pmt_ll_iface list_iface;
+        pmt_ll_node_iface node_iface;
 
         pmt_da_iface array_iface;
 
-        void *get_key(void *node);
+        void *(*get_key)(void *node);
 
-        pmt_hm_equals_t get_equals(void *map);
+        pmt_hm_equals_t (*get_equals)(void *map);
 
-        pmt_hm_hash_t get_hash(void *map);
-
-        size_t get_load_factor_numerator(void *map);
-        
-        size_t get_load_factor_denominator(void *map);
+        pmt_hm_hash_t (*get_hash)(void *map);
 
 } pmt_hm_iface;
 
@@ -40,33 +36,74 @@ typedef struct pmt_hm_iter {
 
 } pmt_hm_iter_t;
 
-void *pmt_hm_create(pmt_hm_iface *iface, const size_t initial_capacity);
+/**
+ * Create a new hash map with the given initial capacity.
+ * 
+ * @return map
+ */
+void *pmt_hm_create(
+        pmt_hm_iface *iface, 
+        void *map, 
+        const size_t initial_capacity);
 
-void *pmt_hm_destroy(pmt_hm_iface *iface, void *map);
+/**
+ * Destroy the hash map.
+ */
+void pmt_hm_destroy(pmt_hm_iface *iface, void *map);
 
-void *pmt_hm_insert(pmt_hm_iface *iface, void *map, void *node);
+/**
+ * Resize the hash map's internal buffer.
+ * 
+ * @returns A value of 'false' is returned when memory allocation fails.
+ */
+bool pmt_hm_resize(
+        pmt_hm_iface *iface, 
+        void *map, 
+        const size_t new_capacity);
 
+/**
+ * Insert a node into the hash map.
+ * 
+ * @returns A value of 'false' is returned when memory allocation fails.
+ */
+bool pmt_hm_insert(pmt_hm_iface *iface, void *map, void *node);
+
+/**
+ * Lookup the node with the given key. 
+ * 
+ * @returns The node with the given key, otherwise NULL.
+ */
 void *pmt_hm_lookup(pmt_hm_iface *iface, void *map, void *key);
 
+/**
+ * Remove the node from the hash map.
+ * 
+ * @returns The removed node if it exists, otherwise NULL.
+ */
 void *pmt_hm_remove(pmt_hm_iface *iface, void *map, void *key);
 
-void *pmt_hm_update(
-        pmt_hm_iface *iface, 
-        void *map, 
-        void *key, 
-        void *(callback)(void *node, void *state),
-        void *state);
+/**
+ * Get an iterator to the beginning of the hash map.
+ */
+void pmt_hm_entries(pmt_hm_iface *iface, void *map, pmt_hm_iter_t *iter);
 
-void *pmt_hm_entries(pmt_hm_iface *iface, void *map, pmt_hm_iter_t *iter);
-
-void *pmt_hm_from(
-        pmt_hm_iface *iface, 
-        void *map, 
-        pmt_hm_iter_t *iter, 
-        void *key);
-
+/**
+ * Get the next node in the iteration.
+ * 
+ * @returns A value of 'false' indicates the iteration has ended.
+ */
 bool pmt_hm_next(pmt_hm_iface *iface, pmt_hm_iter_t *iter, void **node);
 
-size_t law_hm_fnv(void *src, const size_t nb);
+/** 
+ * Does the iterator have a next node?
+ */
+bool pmt_hm_is_next(pmt_hm_iface *iface, pmt_hm_iter_t *iter);
+
+/**
+ * FNV hash nbytes of src.
+ * 
+ * @returns The hashed value returns.
+ */
+size_t pmt_hm_fnv(void *src, const size_t nbytes);
 
 #endif 

@@ -4,19 +4,19 @@
 #include <assert.h>
 #include <string.h>
 
-typedef struct my_node {
+typedef struct my_node_t {
         int value;
-        struct my_node *next;
-} my_node;
+        struct my_node_t *next;
+} my_node_t;
 
 void *get_next(void *node)
 {
-        return ((my_node*)(node))->next;
+        return ((my_node_t*)(node))->next;
 }
 
 void set_next(void *node, void *next)
 {
-        ((my_node*)(node))->next = next;
+        ((my_node_t*)(node))->next = next;
 }
 
 pmt_ll_node_iface my_node_iface = {
@@ -24,7 +24,7 @@ pmt_ll_node_iface my_node_iface = {
         .set_next = set_next
 };
 
-bool match_list(my_node *list, int *nums, const size_t nnums)
+bool match_list(my_node_t *list, int *nums, const size_t nnums)
 {
         for(int x = 0; x < nnums; ++x) {
                 if(!list) {
@@ -37,12 +37,12 @@ bool match_list(my_node *list, int *nums, const size_t nnums)
         return true;
 }
 
-void *init_list(my_node *list, const size_t nnodes) 
+void *init_list(my_node_t *list, const size_t nnodes) 
 {
-        memset(list, 0, sizeof(my_node) * nnodes);
-        my_node *prev = NULL;
+        memset(list, 0, sizeof(my_node_t) * nnodes);
+        my_node_t *prev = NULL;
         for(size_t x = 0; x < nnodes; ++x) {
-                my_node *node = list + x;
+                my_node_t *node = list + x;
                 node->next = prev;
                 node->value = (int)(nnodes - x);
                 prev = node;
@@ -52,26 +52,26 @@ void *init_list(my_node *list, const size_t nnodes)
 
 bool equals(void *node, void *state)
 {
-        my_node *n = node;
+        my_node_t *n = node;
         return *((int*)state) == n->value;
 }
 
 bool evens(void *node, void *state)
 {
-        return ((my_node*)node)->value % 2 == 0;
+        return ((my_node_t*)node)->value % 2 == 0;
 }
 
 bool odds(void *node, void *state)
 {
-        return ((my_node*)node)->value % 2 == 1;
+        return ((my_node_t*)node)->value % 2 == 1;
 }
 
 
 void test_node_push_front()
 {
-        my_node n1 = { .value = 1, .next = NULL };
-        my_node n2 = { .value = 2, .next = NULL };
-        my_node n3 = { .value = 3, .next = NULL };
+        my_node_t n1 = { .value = 1, .next = NULL };
+        my_node_t n2 = { .value = 2, .next = NULL };
+        my_node_t n3 = { .value = 3, .next = NULL };
         assert(pmt_ll_node_push_front(&my_node_iface, NULL, &n3) == &n3);
         assert(pmt_ll_node_push_front(&my_node_iface, &n3, &n2) == &n2);
         assert(pmt_ll_node_push_front(&my_node_iface, &n2, &n1) == &n1);
@@ -80,9 +80,9 @@ void test_node_push_front()
 
 void test_node_last()
 {
-        my_node n1 = { .value = 1, .next = NULL };
-        my_node n2 = { .value = 2, .next = NULL };
-        my_node n3 = { .value = 3, .next = NULL };
+        my_node_t n1 = { .value = 1, .next = NULL };
+        my_node_t n2 = { .value = 2, .next = NULL };
+        my_node_t n3 = { .value = 3, .next = NULL };
         assert(pmt_ll_node_last(&my_node_iface, NULL) == NULL);
         assert(pmt_ll_node_push_front(&my_node_iface, NULL, &n3) == &n3);
         assert(pmt_ll_node_last(&my_node_iface, &n3) == &n3);
@@ -95,9 +95,9 @@ void test_node_last()
 
 void test_node_count()
 {
-        my_node n1 = { .value = 1, .next = NULL };
-        my_node n2 = { .value = 2, .next = NULL };
-        my_node n3 = { .value = 3, .next = NULL };
+        my_node_t n1 = { .value = 1, .next = NULL };
+        my_node_t n2 = { .value = 2, .next = NULL };
+        my_node_t n3 = { .value = 3, .next = NULL };
         assert(pmt_ll_node_count(&my_node_iface, NULL) == 0);
         assert(pmt_ll_node_push_front(&my_node_iface, NULL, &n3) == &n3);
         assert(pmt_ll_node_count(&my_node_iface, &n3) == 1);
@@ -110,9 +110,9 @@ void test_node_count()
 
 void test_node_at()
 {
-        my_node n1 = { .value = 1, .next = NULL };
-        my_node n2 = { .value = 2, .next = NULL };
-        my_node n3 = { .value = 3, .next = NULL };
+        my_node_t n1 = { .value = 1, .next = NULL };
+        my_node_t n2 = { .value = 2, .next = NULL };
+        my_node_t n3 = { .value = 3, .next = NULL };
 
         assert(pmt_ll_node_at(&my_node_iface, NULL, 0) == 0);
         
@@ -134,9 +134,9 @@ void test_node_at()
 
 void test_node_push_back()
 {
-        my_node n1 = { .value = 1, .next = NULL };
-        my_node n2 = { .value = 2, .next = NULL };
-        my_node n3 = { .value = 3, .next = NULL };
+        my_node_t n1 = { .value = 1, .next = NULL };
+        my_node_t n2 = { .value = 2, .next = NULL };
+        my_node_t n3 = { .value = 3, .next = NULL };
         assert(pmt_ll_node_push_back(&my_node_iface, NULL, &n1) == &n1);
         assert(match_list(&n1, (int[]){ 1 }, 1));
         assert(pmt_ll_node_count(&my_node_iface, &n1) == 1);
@@ -150,9 +150,9 @@ void test_node_push_back()
 
 void test_node_insert_after()
 {
-        my_node n1 = { .value = 1, .next = NULL };
-        my_node n2 = { .value = 2, .next = NULL };
-        my_node n3 = { .value = 3, .next = NULL };
+        my_node_t n1 = { .value = 1, .next = NULL };
+        my_node_t n2 = { .value = 2, .next = NULL };
+        my_node_t n3 = { .value = 3, .next = NULL };
 
         assert(pmt_ll_node_insert_after(&my_node_iface, &n1, &n3) == &n1);
         assert(match_list(&n1, (int[]){ 1, 3 }, 2));
@@ -165,10 +165,10 @@ void test_node_insert_after()
 
 void test_node_remove_after()
 {
-        my_node n1 = { .value = 1, .next = NULL };
-        my_node n2 = { .value = 2, .next = NULL };
-        my_node n3 = { .value = 3, .next = NULL };
-        my_node n4 = { .value = 4, .next = NULL };
+        my_node_t n1 = { .value = 1, .next = NULL };
+        my_node_t n2 = { .value = 2, .next = NULL };
+        my_node_t n3 = { .value = 3, .next = NULL };
+        my_node_t n4 = { .value = 4, .next = NULL };
         assert(pmt_ll_node_push_front(&my_node_iface, &n4, &n3) == &n3);
         assert(pmt_ll_node_push_front(&my_node_iface, &n3, &n2) == &n2);
         assert(pmt_ll_node_push_front(&my_node_iface, &n2, &n1) == &n1);
@@ -193,12 +193,12 @@ void test_node_remove_after()
 
 void test_node_remove_first()
 {
-        my_node nodes[5];
-        my_node *list = init_list(nodes, 2);
+        my_node_t nodes[5];
+        my_node_t *list = init_list(nodes, 2);
         assert(match_list(list, (int[]){ 1, 2 }, 2));
 
-        my_node *ref = list;
-        my_node *next = list->next;
+        my_node_t *ref = list;
+        my_node_t *next = list->next;
 
         assert(pmt_ll_node_remove_first(&my_node_iface, (void**)&ref) == list);
         assert(list->next == NULL);
@@ -214,12 +214,12 @@ void test_node_remove_first()
 
 void test_node_remove_last()
 {
-        my_node nodes[5];
-        my_node *list = init_list(nodes, 2);
+        my_node_t nodes[5];
+        my_node_t *list = init_list(nodes, 2);
         assert(match_list(list, (int[]){ 1, 2 }, 2));
 
-        my_node *ref = list;
-        my_node *last;
+        my_node_t *ref = list;
+        my_node_t *last;
 
         assert((last = pmt_ll_node_remove_last(&my_node_iface, (void**)&ref)));
         assert(last->next == NULL);
@@ -237,12 +237,12 @@ void test_node_remove_last()
 
 void test_node_remove_when()
 {
-        my_node nodes[5];
-        my_node *list = init_list(nodes, 5);
+        my_node_t nodes[5];
+        my_node_t *list = init_list(nodes, 5);
         assert(match_list(list, (int[]){ 1, 2, 3, 4, 5 }, 5));
 
-        my_node *ref = list;
-        my_node *rem = NULL;
+        my_node_t *ref = list;
+        my_node_t *rem = NULL;
 
         int value = 3;
         assert((rem = pmt_ll_node_remove_when(
@@ -289,11 +289,11 @@ void test_node_remove_when()
 
 void test_node_filter()
 {
-        my_node nodes[6];
-        my_node *list = init_list(nodes, 6);
+        my_node_t nodes[6];
+        my_node_t *list = init_list(nodes, 6);
         assert(match_list(list, (int[]){ 1, 2, 3, 4, 5, 6 }, 6));
 
-        my_node *ref = list;
+        my_node_t *ref = list;
 
         assert(pmt_ll_node_filter(&my_node_iface, (void**)&ref, evens, NULL) == 3);
         assert(match_list(ref, (int[]){ 2, 4, 6 }, 3));
@@ -307,10 +307,10 @@ void test_node_filter()
 
 void test_node_find()
 {
-        my_node nodes[6];
-        my_node *list = init_list(nodes, 6);
+        my_node_t nodes[6];
+        my_node_t *list = init_list(nodes, 6);
         assert(match_list(list, (int[]){ 1, 2, 3, 4, 5, 6 }, 6));
-        my_node *node;
+        my_node_t *node;
 
         int num = 3;
         assert((node = pmt_ll_node_find(&my_node_iface, list, equals, &num)));
@@ -330,11 +330,11 @@ void test_node_find()
 
 void test_node_foreach()
 {
-        my_node nodes[6];
-        my_node *list = init_list(nodes, 6);
+        my_node_t nodes[6];
+        my_node_t *list = init_list(nodes, 6);
         assert(match_list(list, (int[]){ 1, 2, 3, 4, 5, 6 }, 6));
 
-        my_node *ref = list;
+        my_node_t *ref = list;
         assert(pmt_ll_node_filter(&my_node_iface, (void**)&ref, evens, NULL) == 3);
         assert(pmt_ll_node_foreach(&my_node_iface, ref, evens, NULL));
         assert(pmt_ll_node_foreach(&my_node_iface, ref, odds, NULL) == false);
@@ -342,8 +342,8 @@ void test_node_foreach()
 
 void test_node_reverse()
 {
-        my_node nodes[6];
-        my_node *list = init_list(nodes, 5);
+        my_node_t nodes[6];
+        my_node_t *list = init_list(nodes, 5);
         assert(match_list(list, (int[]){ 1, 2, 3, 4, 5 }, 5));
 
         assert((list = pmt_ll_node_reverse(&my_node_iface, list)));
@@ -364,8 +364,8 @@ void test_node_reverse()
 }
 
 typedef struct my_list {
-        my_node *first;
-        my_node *last;
+        my_node_t *first;
+        my_node_t *last;
 } my_list;
 
 void *get_first(void *list)
@@ -401,9 +401,9 @@ pmt_ll_iface my_list_iface = {
 
 void test_push_front()
 {
-        my_node n1 = { .value = 1, .next = NULL };
-        my_node n2 = { .value = 2, .next = NULL };
-        my_node n3 = { .value = 3, .next = NULL };
+        my_node_t n1 = { .value = 1, .next = NULL };
+        my_node_t n2 = { .value = 2, .next = NULL };
+        my_node_t n3 = { .value = 3, .next = NULL };
         my_list list = { .first = NULL, .last = NULL };
 
         assert(pmt_ll_push_front(&my_list_iface, &list, &n3) == &list);
@@ -424,9 +424,9 @@ void test_push_front()
 
 void test_push_back()
 {
-        my_node n1 = { .value = 1, .next = NULL };
-        my_node n2 = { .value = 2, .next = NULL };
-        my_node n3 = { .value = 3, .next = NULL };
+        my_node_t n1 = { .value = 1, .next = NULL };
+        my_node_t n2 = { .value = 2, .next = NULL };
+        my_node_t n3 = { .value = 3, .next = NULL };
         my_list list = { .first = NULL, .last = NULL };
 
         assert(pmt_ll_push_back(&my_list_iface, &list, &n1) == &list);
@@ -447,9 +447,9 @@ void test_push_back()
 
 void test_insert_after()
 {
-        my_node n1 = { .value = 1, .next = NULL };
-        my_node n2 = { .value = 2, .next = NULL };
-        my_node n3 = { .value = 3, .next = NULL };
+        my_node_t n1 = { .value = 1, .next = NULL };
+        my_node_t n2 = { .value = 2, .next = NULL };
+        my_node_t n3 = { .value = 3, .next = NULL };
         my_list list = { .first = NULL, .last = NULL };
 
         assert(pmt_ll_push_back(&my_list_iface, &list, &n1) == &list);
@@ -470,9 +470,9 @@ void test_insert_after()
 
 void test_remove_after()
 {
-        my_node n1 = { .value = 1, .next = NULL };
-        my_node n2 = { .value = 2, .next = NULL };
-        my_node n3 = { .value = 3, .next = NULL };
+        my_node_t n1 = { .value = 1, .next = NULL };
+        my_node_t n2 = { .value = 2, .next = NULL };
+        my_node_t n3 = { .value = 3, .next = NULL };
         my_list list = { .first = NULL, .last = NULL };
 
         assert(pmt_ll_push_back(&my_list_iface, &list, &n1) == &list);
@@ -505,9 +505,9 @@ void test_remove_after()
 
 void test_remove_first()
 {
-        my_node n1 = { .value = 1, .next = NULL };
-        my_node n2 = { .value = 2, .next = NULL };
-        my_node n3 = { .value = 3, .next = NULL };
+        my_node_t n1 = { .value = 1, .next = NULL };
+        my_node_t n2 = { .value = 2, .next = NULL };
+        my_node_t n3 = { .value = 3, .next = NULL };
         my_list list = { .first = NULL, .last = NULL };
 
         assert(pmt_ll_push_back(&my_list_iface, &list, &n1) == &list);
@@ -545,9 +545,9 @@ void test_remove_first()
 
 void test_remove_last()
 {
-        my_node n1 = { .value = 1, .next = NULL };
-        my_node n2 = { .value = 2, .next = NULL };
-        my_node n3 = { .value = 3, .next = NULL };
+        my_node_t n1 = { .value = 1, .next = NULL };
+        my_node_t n2 = { .value = 2, .next = NULL };
+        my_node_t n3 = { .value = 3, .next = NULL };
         my_list list = { .first = NULL, .last = NULL };
 
         assert(pmt_ll_push_back(&my_list_iface, &list, &n1) == &list);
@@ -585,11 +585,11 @@ void test_remove_last()
 
 void test_remove_when()
 {
-        my_node n1 = { .value = 1, .next = NULL };
-        my_node n2 = { .value = 2, .next = NULL };
-        my_node n3 = { .value = 3, .next = NULL };
-        my_node n4 = { .value = 4, .next = NULL };
-        my_node n5 = { .value = 5, .next = NULL };
+        my_node_t n1 = { .value = 1, .next = NULL };
+        my_node_t n2 = { .value = 2, .next = NULL };
+        my_node_t n3 = { .value = 3, .next = NULL };
+        my_node_t n4 = { .value = 4, .next = NULL };
+        my_node_t n5 = { .value = 5, .next = NULL };
 
         my_list list = { .first = NULL, .last = NULL };
 
@@ -651,12 +651,12 @@ void test_remove_when()
 
 void test_filter()
 {
-        my_node n1 = { .value = 1, .next = NULL };
-        my_node n2 = { .value = 2, .next = NULL };
-        my_node n3 = { .value = 3, .next = NULL };
-        my_node n4 = { .value = 4, .next = NULL };
-        my_node n5 = { .value = 5, .next = NULL };
-        my_node n6 = { .value = 6, .next = NULL };
+        my_node_t n1 = { .value = 1, .next = NULL };
+        my_node_t n2 = { .value = 2, .next = NULL };
+        my_node_t n3 = { .value = 3, .next = NULL };
+        my_node_t n4 = { .value = 4, .next = NULL };
+        my_node_t n5 = { .value = 5, .next = NULL };
+        my_node_t n6 = { .value = 6, .next = NULL };
         my_list list = { .first = NULL, .last = NULL };
 
         assert(pmt_ll_push_back(&my_list_iface, &list, &n1) == &list);
@@ -702,12 +702,12 @@ void test_filter()
 
 void test_reverse()
 {
-        my_node n1 = { .value = 1, .next = NULL };
-        my_node n2 = { .value = 2, .next = NULL };
-        my_node n3 = { .value = 3, .next = NULL };
-        my_node n4 = { .value = 4, .next = NULL };
-        my_node n5 = { .value = 5, .next = NULL };
-        my_node n6 = { .value = 6, .next = NULL };
+        my_node_t n1 = { .value = 1, .next = NULL };
+        my_node_t n2 = { .value = 2, .next = NULL };
+        my_node_t n3 = { .value = 3, .next = NULL };
+        my_node_t n4 = { .value = 4, .next = NULL };
+        my_node_t n5 = { .value = 5, .next = NULL };
+        my_node_t n6 = { .value = 6, .next = NULL };
         my_list list = { .first = NULL, .last = NULL };
 
         assert(pmt_ll_push_back(&my_list_iface, &list, &n1) == &list);

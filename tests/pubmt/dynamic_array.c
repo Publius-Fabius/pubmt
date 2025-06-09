@@ -5,40 +5,40 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-typedef struct my_array {
+typedef struct my_map_t {
         size_t capacity, size;
         int *buffer;
 
-} my_array;
+} my_map_t;
 
 void *get_buffer(void *array)
 {
-        return ((my_array*)array)->buffer;
+        return ((my_map_t*)array)->buffer;
 }
 
 void set_buffer(void *array, void *buffer)
 {
-        ((my_array*)array)->buffer = buffer;
+        ((my_map_t*)array)->buffer = buffer;
 }
 
 size_t get_size(void *array)
 {
-        return ((my_array*)array)->size;
+        return ((my_map_t*)array)->size;
 }
 
 void set_size(void *array, const size_t size)
 {
-        ((my_array*)array)->size = size;
+        ((my_map_t*)array)->size = size;
 }
 
 size_t get_capacity(void *array)
 {
-        return ((my_array*)array)->capacity;
+        return ((my_map_t*)array)->capacity;
 }
 
 void set_capacity(void *array, const size_t capacity)
 {
-        ((my_array*)array)->capacity = capacity;
+        ((my_map_t*)array)->capacity = capacity;
 }
 
 size_t get_element_size(void *array)
@@ -98,7 +98,7 @@ pmt_da_iface my_iface = {
 void test_init()
 {
         int buffer[8];
-        my_array array;
+        my_map_t array;
         pmt_da_init(&my_iface, &array, buffer, 0, 8);
         assert(array.buffer = buffer);
         assert(array.capacity == 8);
@@ -107,7 +107,7 @@ void test_init()
 
 void test_create_destroy()
 {
-        my_array array;
+        my_map_t array;
         pmt_da_create(&my_iface, &array, 8);
         assert(array.buffer);
         assert(array.capacity == 8);
@@ -118,7 +118,7 @@ void test_create_destroy()
 void test_clear()
 {
         int buffer[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
-        my_array array;
+        my_map_t array;
         pmt_da_init(&my_iface, &array, buffer, 8, 8);
 
         pmt_da_clear(&my_iface, &array);
@@ -128,7 +128,7 @@ void test_clear()
 void test_zero_buffer()
 {
         int buffer[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
-        my_array array;
+        my_map_t array;
         pmt_da_init(&my_iface, &array, buffer, 0, 8);
 
         assert(pmt_da_zero_buffer(&my_iface, &array, 0, 8));
@@ -139,7 +139,7 @@ void test_zero_buffer()
 void test_is_empty()
 {
         int buffer[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
-        my_array array;
+        my_map_t array;
         pmt_da_init(&my_iface, &array, buffer, 1, 8);
 
         assert(!pmt_da_is_empty(&my_iface, &array));
@@ -150,7 +150,7 @@ void test_is_empty()
 void test_at()
 {
         int buffer[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
-        my_array array;
+        my_map_t array;
         pmt_da_init(&my_iface, &array, buffer, 8, 8);
         assert(array.buffer = buffer);
         assert(array.capacity == 8);
@@ -166,7 +166,7 @@ void test_at()
 
 void test_resize()
 {
-        my_array array;
+        my_map_t array;
         (void)pmt_da_create(&my_iface, &array, 4);
 
         assert(pmt_da_resize(&my_iface, &array, 8));
@@ -177,7 +177,7 @@ void test_resize()
 
 void test_scale_capacity()
 {
-        my_array array;
+        my_map_t array;
         (void)pmt_da_create(&my_iface, &array, 4);
 
         assert(pmt_da_scale_capacity(&my_iface, &array, 5));
@@ -191,7 +191,7 @@ void test_scale_capacity()
 
 void test_push_back()
 {
-        my_array array;
+        my_map_t array;
         (void)pmt_da_create(&my_iface, &array, 4);
 
         int *b = array.buffer;
@@ -236,7 +236,7 @@ void test_push_back()
 
 void test_pop_back()
 {
-        my_array array;
+        my_map_t array;
         (void)pmt_da_create(&my_iface, &array, 4);
 
         int value = 1;
@@ -271,7 +271,7 @@ void test_pop_back()
 
 void test_first_last()
 {
-        my_array array;
+        my_map_t array;
         (void)pmt_da_create(&my_iface, &array, 4);
 
         int value = 1;
@@ -301,7 +301,7 @@ void test_first_last()
 
 void test_insert_range()
 {
-        my_array array;
+        my_map_t array;
         (void)pmt_da_create(&my_iface, &array, 4);
 
         int value = 1;
@@ -335,7 +335,7 @@ void test_insert_range()
 
 void test_remove_range()
 {
-        my_array array;
+        my_map_t array;
         (void)pmt_da_create(&my_iface, &array, 4);
 
         int value = 1;
