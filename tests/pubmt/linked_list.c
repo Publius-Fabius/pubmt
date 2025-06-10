@@ -66,7 +66,6 @@ bool odds(void *node, void *state)
         return ((my_node_t*)node)->value % 2 == 1;
 }
 
-
 void test_node_push_front()
 {
         my_node_t n1 = { .value = 1, .next = NULL };
