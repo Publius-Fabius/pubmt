@@ -6,6 +6,7 @@ clean:
 	rm -r build/pubmt || true
 	rm -r build || true
 	rm -r bin || true
+	rm libpubmt.a || true
 
 build:
 	mkdir build
@@ -79,6 +80,15 @@ bin/test_avl_tree: tests/pubmt/avl_tree.c \
 	$(CC) $(CFLAGS) -o $@ $^ 
 run_test_avl_tree : bin/test_avl_tree
 	valgrind -q --error-exitcode=1 --leak-check=full $^ 1>/dev/null
+
+libpubmt.a : \
+	build/pubmt/linked_list.o \
+	build/pubmt/dynamic_array.o \
+	build/pubmt/binary_heap.o \
+	build/pubmt/byte_stack.o \
+	build/pubmt/hash_map.o \
+	build/pubmt/avl_tree.o
+	ar -crs $@ $^
 
 suite: \
 	run_test_linked_list \
