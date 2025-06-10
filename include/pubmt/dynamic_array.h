@@ -46,6 +46,12 @@ typedef struct pmt_da_iface {
 
 } pmt_da_iface_t;
 
+/**
+ * Validate the dynamic array interface. 
+ * @returns Will return 'false' if any callbacks are NULL.
+ */
+bool pmt_da_iface_validate(pmt_da_iface_t *iface);
+
 /** 
  * Initialize the dynamic array with the given buffer and initial capacity. 
  * 

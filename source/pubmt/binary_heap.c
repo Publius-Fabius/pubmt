@@ -4,6 +4,15 @@
 #include <assert.h>
 #include <string.h>
 
+bool pmt_bh_iface_validate(pmt_bh_iface_t *iface)
+{
+        return 
+                iface && 
+                iface->get_less_than && 
+                iface->get_swap &&
+                pmt_da_iface_validate(&iface->array_iface);
+}
+
 static void *pmt_bh_heapify_up(
         pmt_bh_less_than_t cmp,
         pmt_bh_swap_t swap,
@@ -42,12 +51,14 @@ static void pmt_bh_heapify_down(
 {
         uint8_t *b = buffer;
 
-        void    *index_ptr = b + index * elem_size,
+        void    
+                *index_ptr = b + index * elem_size,
                 *min_ptr = index_ptr;
 
         for(;;) {
 
-                size_t  left = 2 * index + 1,
+                size_t  
+                        left = 2 * index + 1,
                         right = 2 * index + 2,
                         min = index;
 
@@ -92,14 +103,7 @@ static void pmt_bh_heapify_down(
 
 void *pmt_bh_insert(pmt_bh_iface_t *iface, void *heap, void *elem)
 {
-        assert(heap);
-        assert(elem);
-        assert(iface);
-        assert(iface->get_less_than);
-        assert(iface->get_swap);
-        assert(iface->array_iface.get_buffer);
-        assert(iface->array_iface.get_size);
-        assert(iface->array_iface.get_element_size);
+        assert(heap && elem && pmt_bh_iface_validate(iface));
 
         pmt_da_iface_t *a_iface = &iface->array_iface;
         
@@ -119,19 +123,14 @@ void *pmt_bh_insert(pmt_bh_iface_t *iface, void *heap, void *elem)
 
 bool pmt_bh_pop(pmt_bh_iface_t *iface, void *heap, void *elem)
 {
-        assert(heap);
-        assert(iface);
-        assert(iface->get_less_than);
-        assert(iface->get_swap);
-        assert(iface->array_iface.get_buffer);
-        assert(iface->array_iface.get_size);
-        assert(iface->array_iface.get_element_size);
+        assert(heap && pmt_bh_iface_validate(iface));
 
         pmt_da_iface_t *a_iface = &iface->array_iface;
 
         const size_t elem_size = a_iface->get_element_size(heap);
 
-        void    *first = pmt_da_first(a_iface, heap),
+        void    
+                *first = pmt_da_first(a_iface, heap),
                 *last = pmt_da_last(a_iface, heap);
 
         if(!first) {

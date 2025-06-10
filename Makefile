@@ -70,9 +70,20 @@ bin/test_hash_map: tests/pubmt/hash_map.c \
 run_test_hash_map : bin/test_hash_map
 	valgrind -q --error-exitcode=1 --leak-check=full $^ 1>/dev/null
 
+build/pubmt/avl_tree.o : source/pubmt/avl_tree.c \
+	include/pubmt/avl_tree.h \
+	scaffold 
+	$(CC) $(CFLAGS) -c -o $@ $<
+bin/test_avl_tree: tests/pubmt/avl_tree.c \
+	build/pubmt/avl_tree.o
+	$(CC) $(CFLAGS) -o $@ $^ 
+run_test_avl_tree : bin/test_avl_tree
+	valgrind -q --error-exitcode=1 --leak-check=full $^ 1>/dev/null
+
 suite: \
 	run_test_linked_list \
 	run_test_dynamic_array \
 	run_test_binary_heap \
 	run_test_byte_stack \
-	run_test_hash_map
+	run_test_hash_map \
+	run_test_avl_tree

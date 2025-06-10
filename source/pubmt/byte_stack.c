@@ -10,8 +10,7 @@ pmt_byte_stack_t *pmt_bs_init(
         const size_t offset,
         const size_t length)
 {
-        assert(stack);
-        assert(offset <= length);
+        assert(stack && offset <= length);
 
         stack->buffer = buffer;
         stack->length = length;
@@ -49,8 +48,7 @@ bool pmt_bs_is_empty(pmt_byte_stack_t *stack)
 
 void *pmt_bs_push(pmt_byte_stack_t *stack, const size_t nbytes, void *data)
 {
-        assert(stack);
-        assert(stack->offset <= stack->length);
+        assert(stack && stack->offset <= stack->length);
 
         if(stack->offset < nbytes) {
                 return NULL;
@@ -69,16 +67,14 @@ void *pmt_bs_push(pmt_byte_stack_t *stack, const size_t nbytes, void *data)
 
 void *pmt_bs_peek(pmt_byte_stack_t *stack)
 {
-        assert(stack);
-        assert(stack->offset <= stack->length);
+        assert(stack && stack->offset <= stack->length);
 
         return ((uint8_t*)stack->buffer) + stack->offset;
 }
 
 bool pmt_bs_pop(pmt_byte_stack_t *stack, const size_t nbytes, void *data)
 {
-        assert(stack);
-        assert(stack->offset <= stack->length);
+        assert(stack && stack->offset <= stack->length);
 
         const size_t new_offset = stack->offset + nbytes; 
 

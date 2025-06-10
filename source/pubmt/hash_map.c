@@ -282,7 +282,7 @@ bool pmt_hm_next(
 
 size_t pmt_hm_fnv(void *src, const size_t nbytes)
 {
-        #if UINTPTR_MAX > 14695981039346656037UL
+        #if UINTPTR_MAX > 14695981039346656037ULL
 
                 const uint64_t FNV_offset_basis = 14695981039346656037ULL;
                 const uint64_t FNV_prime = 1099511628211ULL;
@@ -291,8 +291,8 @@ size_t pmt_hm_fnv(void *src, const size_t nbytes)
 
         #elif 
 
-                const uint32_t FNV_offset_basis = 2166136261U ;
-                const uint32_t FNV_prime = 16777619U;
+                const uint32_t FNV_offset_basis = 2166136261UL;
+                const uint32_t FNV_prime = 16777619UL;
 
                 uint32_t hash = FNV_offset_basis;
 

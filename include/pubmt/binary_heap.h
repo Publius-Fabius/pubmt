@@ -22,6 +22,13 @@ typedef struct pmt_bh_iface {
 } pmt_bh_iface_t;
 
 /**
+ * Validate the binary heap interface. 
+ * 
+ * @returns Will return 'false' if any callbacks are NULL.
+ */
+bool pmt_bh_iface_validate(pmt_bh_iface_t *iface);
+
+/**
  * Insert an element into the binary heap.  This function may resize the 
  * internal buffer. 
  * 

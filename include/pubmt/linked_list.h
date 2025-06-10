@@ -13,6 +13,33 @@ typedef struct pmt_ll_node_iface_t {
         
 } pmt_ll_node_iface_t;
 
+/** Singly Linked List Interface */
+typedef struct pmt_ll_iface_t {
+
+        pmt_ll_node_iface_t node_iface;
+
+        void *(*get_first)(void *list);
+        void (*set_first)(void *list, void *first);
+
+        void *(*get_last)(void *list);
+        void (*set_last)(void *list, void *last);
+        
+} pmt_ll_iface_t;
+
+/**
+ * Validate the linked list node interface. 
+ * 
+ * @returns Will return 'false' if any callbacks are NULL.
+ */
+bool pmt_ll_node_iface_validate(pmt_ll_node_iface_t *i);
+
+/**
+ * Validate the linked list interface. 
+ * 
+ * @returns Will return 'false' if any callbacks are NULL.
+ */
+bool pmt_ll_iface_validate(pmt_ll_iface_t *i);
+
 /** 
  * Traverses the list to find the last node O(n). 
  * 
@@ -184,19 +211,6 @@ bool pmt_ll_node_foreach(
  * RETURNS: The reversed list.
  */
 void *pmt_ll_node_reverse(pmt_ll_node_iface_t *iface, void *list);
-
-/** Singly Linked List Interface */
-typedef struct pmt_ll_iface_t {
-
-        pmt_ll_node_iface_t node_iface;
-
-        void *(*get_first)(void *list);
-        void (*set_first)(void *list, void *first);
-
-        void *(*get_last)(void *list);
-        void (*set_last)(void *list, void *last);
-        
-} pmt_ll_iface_t;
 
 /**
  * Is the list empty O(1). 
