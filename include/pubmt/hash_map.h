@@ -36,6 +36,20 @@ typedef struct pmt_hm_iter {
 
 } pmt_hm_iter_t;
 
+/** Error Codes */
+enum pmt_hm_error {
+        PMT_HM_SUCCESS                  = 0,
+        PMT_HM_EXISTS                   = -1,
+        PMT_HM_RESIZE                   = -2
+};
+
+/**
+ * Validate the hash map interface. 
+ * 
+ * @returns Will return 'false' if any callbacks are NULL.
+ */
+bool pmt_hm_iface_validate(pmt_hm_iface_t *iface);
+
 /**
  * Create a new hash map with the given initial capacity.
  * 
@@ -62,11 +76,15 @@ bool pmt_hm_resize(
         const size_t new_capacity);
 
 /**
- * Insert a node into the hash map.
+ * Insert a node into the hash map unless a node with the same key already 
+ * exists.
  * 
- * @returns A value of 'false' is returned when memory allocation fails.
+ * @returns 
+ *      PMT_HM_SUCCESS - The node was inserted. 
+ *      PMT_HM_EXISTS - Operation failed because the key already exists.
+ *      PMT_HM_RESIZE - Operation failed because it couldn't resize the map.
  */
-bool pmt_hm_insert(pmt_hm_iface_t *iface, void *map, void *node);
+int pmt_hm_insert(pmt_hm_iface_t *iface, void *map, void *node);
 
 /**
  * Lookup the node with the given key. 

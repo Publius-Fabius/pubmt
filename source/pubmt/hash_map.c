@@ -4,6 +4,17 @@
 #include <string.h>
 #include <stdint.h>
 
+bool pmt_hm_iface_validate(pmt_hm_iface_t *iface)
+{
+        return 
+                iface &&
+                iface->get_key &&
+                iface->get_equals && 
+                iface->get_hash &&
+                pmt_da_iface_validate(&iface->array_iface) &&
+                pmt_ll_node_iface_validate(&iface->node_iface);
+}
+
 void *pmt_hm_create(
         pmt_hm_iface_t *iface, 
         void *map, 
@@ -29,21 +40,10 @@ void pmt_hm_destroy(pmt_hm_iface_t *iface, void *map)
 
 bool pmt_hm_resize(pmt_hm_iface_t *iface, void *map, const size_t new_cap)
 {
-        assert(iface);
-        assert(iface->get_hash);
-        assert(iface->get_key);
+        assert(map && pmt_hm_iface_validate(iface));
 
         pmt_da_iface_t *array_iface = &iface->array_iface;
-        assert(array_iface->get_alloc);
-        assert(array_iface->get_free);
-        assert(array_iface->get_alloc_state);
-        assert(array_iface->get_capacity);
-        assert(array_iface->set_capacity);
-        assert(array_iface->get_buffer);
-        assert(array_iface->set_buffer);
-
         pmt_ll_node_iface_t *node_iface = &iface->node_iface;
-        assert(node_iface->set_next);
 
         assert(array_iface->get_capacity(map) <= new_cap);
 
@@ -97,31 +97,21 @@ static bool pmt_hm_predicate(void *node, void *state)
         return args->equals(args->get_key(node), args->key);
 }
 
-bool pmt_hm_insert(pmt_hm_iface_t *iface, void *map, void *node)
+int pmt_hm_insert(pmt_hm_iface_t *iface, void *map, void *node)
 {
-        assert(iface);
-        assert(map);
-        assert(node);
-
-        assert(iface->get_hash);
-        assert(iface->get_key);
-        assert(iface->get_equals);
+        assert(map && node && pmt_hm_iface_validate(iface));
 
         pmt_da_iface_t *array_iface = &iface->array_iface;
-        assert(array_iface->get_buffer);
-        assert(array_iface->get_capacity);
-        assert(array_iface->get_size);
-        assert(array_iface->set_size);
-
         pmt_ll_node_iface_t *node_iface = &iface->node_iface;
 
         const size_t new_size = array_iface->get_size(map) + 1;
         
-        size_t  capacity = array_iface->get_capacity(map),
+        size_t  
+                capacity = array_iface->get_capacity(map),
                 load = capacity * 3;
 
         if(load < capacity) {
-                return false;
+                return PMT_HM_RESIZE;
         }
 
         load /= 4;
@@ -129,7 +119,7 @@ bool pmt_hm_insert(pmt_hm_iface_t *iface, void *map, void *node)
         if(new_size >= load) {
                 capacity *= 2;
                 if(!pmt_hm_resize(iface, map, capacity)) {
-                        return false;
+                        return PMT_HM_RESIZE;
                 }
         }
 
@@ -143,36 +133,27 @@ bool pmt_hm_insert(pmt_hm_iface_t *iface, void *map, void *node)
                 .key = key };
     
         if(pmt_ll_node_find(node_iface, *bucket, pmt_hm_predicate, &args)) {
-                return false;
+                return PMT_HM_EXISTS;
         }
 
         *bucket = pmt_ll_node_push_front(node_iface, *bucket, node);
 
         array_iface->set_size(map, new_size);
         
-        return true;
+        return PMT_HM_SUCCESS;
 }
-
 
 void *pmt_hm_lookup(pmt_hm_iface_t *iface, void *map, void *key)
 {
-        assert(iface);
-        assert(map);
-        assert(key);
-
-        assert(iface->get_hash);
-        assert(iface->get_key);
-        assert(iface->get_equals);
+        assert(map && key && pmt_hm_iface_validate(iface));
 
         pmt_da_iface_t *array_iface = &iface->array_iface;
-        assert(array_iface->get_buffer);
-        assert(array_iface->get_capacity);
-
         pmt_ll_node_iface_t *node_iface = &iface->node_iface;
 
         const size_t capacity = array_iface->get_capacity(map);
 
-        void    **buffer = array_iface->get_buffer(map),
+        void    
+                **buffer = array_iface->get_buffer(map),
                 *bucket = buffer[iface->get_hash(map)(key) % capacity];
     
         pmt_hm_predicate_args_t args = { 
@@ -185,20 +166,9 @@ void *pmt_hm_lookup(pmt_hm_iface_t *iface, void *map, void *key)
 
 void *pmt_hm_remove(pmt_hm_iface_t *iface, void *map, void *key)
 {
-        assert(iface);
-        assert(map);
-        assert(key);
-
-        assert(iface->get_hash);
-        assert(iface->get_key);
-        assert(iface->get_equals);
+        assert(map && key && pmt_hm_iface_validate(iface));
 
         pmt_da_iface_t *array_iface = &iface->array_iface;
-        assert(array_iface->get_buffer);
-        assert(array_iface->get_capacity);
-        assert(array_iface->get_size);
-        assert(array_iface->get_size);
-
         pmt_ll_node_iface_t *node_iface = &iface->node_iface;
 
         const size_t capacity = array_iface->get_capacity(map);

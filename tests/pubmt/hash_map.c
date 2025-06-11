@@ -175,39 +175,39 @@ void test_insert_lookup()
         }
 
         int key = 1;
-        assert(pmt_hm_insert(&my_iface, &map, &n1));
+        assert(pmt_hm_insert(&my_iface, &map, &n1) == PMT_HM_SUCCESS);
         assert(pmt_hm_lookup(&my_iface, &map, &key) == &n1);
-        assert(!pmt_hm_insert(&my_iface, &map, &n1));
+        assert(pmt_hm_insert(&my_iface, &map, &n1) == PMT_HM_EXISTS);
         assert(map.size == 1);
 
         key = 2;
-        assert(pmt_hm_insert(&my_iface, &map, &n2));
+        assert(pmt_hm_insert(&my_iface, &map, &n2) == PMT_HM_SUCCESS);
         assert(pmt_hm_lookup(&my_iface, &map, &key) == &n2);
-        assert(!pmt_hm_insert(&my_iface, &map, &n2));
+        assert(pmt_hm_insert(&my_iface, &map, &n2) == PMT_HM_EXISTS);
         assert(map.size == 2);
 
         key = 3;
-        assert(pmt_hm_insert(&my_iface, &map, &n3));
+        assert(pmt_hm_insert(&my_iface, &map, &n3) == PMT_HM_SUCCESS);
         assert(pmt_hm_lookup(&my_iface, &map, &key) == &n3);
-        assert(!pmt_hm_insert(&my_iface, &map, &n3));
+        assert(pmt_hm_insert(&my_iface, &map, &n3) == PMT_HM_EXISTS);
         assert(map.size == 3);
 
         key = 4;
-        assert(pmt_hm_insert(&my_iface, &map, &n4));
+        assert(pmt_hm_insert(&my_iface, &map, &n4) == PMT_HM_SUCCESS);
         assert(pmt_hm_lookup(&my_iface, &map, &key) == &n4);
-        assert(!pmt_hm_insert(&my_iface, &map, &n4));
+        assert(pmt_hm_insert(&my_iface, &map, &n4) == PMT_HM_EXISTS);
         assert(map.size == 4);
 
         key = 5;
-        assert(pmt_hm_insert(&my_iface, &map, &n5));
+        assert(pmt_hm_insert(&my_iface, &map, &n5) == PMT_HM_SUCCESS);
         assert(pmt_hm_lookup(&my_iface, &map, &key) == &n5);
-        assert(!pmt_hm_insert(&my_iface, &map, &n5));
+        assert(pmt_hm_insert(&my_iface, &map, &n5) == PMT_HM_EXISTS);
         assert(map.size == 5);
 
         key = 6;
-        assert(pmt_hm_insert(&my_iface, &map, &n6));
+        assert(pmt_hm_insert(&my_iface, &map, &n6) == PMT_HM_SUCCESS);
         assert(pmt_hm_lookup(&my_iface, &map, &key) == &n6);
-        assert(!pmt_hm_insert(&my_iface, &map, &n6));
+        assert(pmt_hm_insert(&my_iface, &map, &n6) == PMT_HM_EXISTS);
         assert(map.size == 6);
 
         key = 7;
@@ -230,10 +230,10 @@ void test_resize()
                 assert(map.buffer[x] == 0);
         }
         
-        assert(pmt_hm_insert(&my_iface, &map, &n1));
-        assert(pmt_hm_insert(&my_iface, &map, &n2));
-        assert(pmt_hm_insert(&my_iface, &map, &n3));
-        assert(pmt_hm_insert(&my_iface, &map, &n4));
+        assert(pmt_hm_insert(&my_iface, &map, &n1) == PMT_HM_SUCCESS);
+        assert(pmt_hm_insert(&my_iface, &map, &n2) == PMT_HM_SUCCESS);
+        assert(pmt_hm_insert(&my_iface, &map, &n3) == PMT_HM_SUCCESS);
+        assert(pmt_hm_insert(&my_iface, &map, &n4) == PMT_HM_SUCCESS);
 
         assert(pmt_hm_resize(&my_iface, &map, 24));
         assert(map.capacity == 24);
@@ -263,10 +263,10 @@ void test_remove()
         for(int x = 0; x < 16; ++x) {
                 assert(map.buffer[x] == 0);
         }
-        assert(pmt_hm_insert(&my_iface, &map, &n1));
-        assert(pmt_hm_insert(&my_iface, &map, &n2));
-        assert(pmt_hm_insert(&my_iface, &map, &n3));
-        assert(pmt_hm_insert(&my_iface, &map, &n4));
+        assert(pmt_hm_insert(&my_iface, &map, &n1) == PMT_HM_SUCCESS);
+        assert(pmt_hm_insert(&my_iface, &map, &n2) == PMT_HM_SUCCESS);
+        assert(pmt_hm_insert(&my_iface, &map, &n3) == PMT_HM_SUCCESS);
+        assert(pmt_hm_insert(&my_iface, &map, &n4) == PMT_HM_SUCCESS);
 
         int key = 1;
         assert(pmt_hm_remove(&my_iface, &map, &key));
@@ -298,8 +298,8 @@ void test_iterator()
                 my_node_t *node = malloc(sizeof(my_node_t));
                 node->key = x;
                 node->next = NULL;
-                assert(pmt_hm_insert(&my_iface, &map, (void*)node));
-                assert(!pmt_hm_insert(&my_iface, &map, (void*)node));
+                assert(pmt_hm_insert(&my_iface, &map, (void*)node) == PMT_HM_SUCCESS);
+                assert(pmt_hm_insert(&my_iface, &map, (void*)node) == PMT_HM_EXISTS);
                 assert(pmt_hm_lookup(&my_iface, &map, &x) == node);
         }
 
