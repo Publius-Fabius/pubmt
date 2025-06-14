@@ -250,6 +250,21 @@ bool pmt_hm_next(
         return true;
 }
 
+bool pmt_hm_is_next(pmt_hm_iface_t *iface, pmt_hm_iter_t *iter)
+{
+        const size_t capacity = iface->array_iface.get_capacity(iter->map);
+        void **buffer = iface->array_iface.get_buffer(iter->map);
+
+        while(!iter->node) {
+                if(++iter->bucket >= capacity) {
+                        return false;
+                }
+                iter->node = buffer[iter->bucket];
+        }
+
+        return iter->bucket < capacity;
+}
+
 size_t pmt_hm_fnv(void *src, const size_t nbytes)
 {
         #if UINTPTR_MAX > 14695981039346656037ULL
